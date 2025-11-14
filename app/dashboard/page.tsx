@@ -14,40 +14,44 @@ export default function CatererDashboard() {
   const [activeTab, setActiveTab] = useState('overview')
 
   useEffect(() => {
-    const token = localStorage.getItem('authToken')
-    const userId = localStorage.getItem('userId')
-    const userRole = localStorage.getItem('userRole')
+    const checkAuthAndFetchData = async () => {
+      try {
+        const response = await fetch('/api/bookings/list')
+        
+        if (!response.ok) {
+          router.push('/login')
+          return
+        }
 
-    if (!token || userRole !== 'caterer') {
-      router.push('/login')
-      return
+        const data = await response.json()
+        setBookings(data.bookings || [])
+        setUser({ authenticated: true })
+      } catch (error) {
+        console.error('Error fetching bookings:', error)
+        router.push('/login')
+      } finally {
+        setLoading(false)
+      }
     }
 
-    setUser({ id: userId })
-    fetchBookings()
+    checkAuthAndFetchData()
   }, [router])
 
-  const fetchBookings = async () => {
+  const handleLogout = async () => {
     try {
-      const response = await fetch('/api/bookings/list')
-      const data = await response.json()
-      setBookings(data.bookings || [])
+      await fetch('/api/auth/logout', { method: 'POST' })
+      router.push('/')
     } catch (error) {
-      console.error('Error fetching bookings:', error)
-    } finally {
-      setLoading(false)
+      console.error('Logout error:', error)
     }
-  }
-
-  const handleLogout = () => {
-    localStorage.removeItem('authToken')
-    localStorage.removeItem('userId')
-    localStorage.removeItem('userRole')
-    router.push('/')
   }
 
   if (loading) {
     return <div className="min-h-screen flex items-center justify-center">Loading...</div>
+  }
+
+  if (!user?.authenticated) {
+    return null
   }
 
   return (

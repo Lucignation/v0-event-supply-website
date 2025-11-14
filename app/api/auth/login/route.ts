@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { getUserByEmail } from '@/lib/db'
+import { comparePassword, generateToken } from '@/lib/auth'
 
 export async function POST(request: NextRequest) {
   try {
@@ -12,18 +14,46 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // TODO: Verify email and password against database
-    // TODO: Generate JWT token
-    
-    return NextResponse.json(
-      { 
+    const user = await getUserByEmail(email)
+    if (!user) {
+      return NextResponse.json(
+        { message: 'Invalid email or password' },
+        { status: 401 }
+      )
+    }
+
+    const isPasswordValid = await comparePassword(password, user.password_hash)
+    if (!isPasswordValid) {
+      return NextResponse.json(
+        { message: 'Invalid email or password' },
+        { status: 401 }
+      )
+    }
+
+    const token = await generateToken({
+      userId: user.id,
+      email: user.email,
+      role: user.role,
+    })
+
+    const response = NextResponse.json(
+      {
         message: 'Login successful',
-        token: 'temp-token',
-        userId: 'temp-id',
-        role: 'caterer',
+        token,
+        userId: user.id,
+        role: user.role,
       },
       { status: 200 }
     )
+
+    response.cookies.set('authToken', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 7 * 24 * 60 * 60,
+    })
+
+    return response
   } catch (error) {
     console.error('Login error:', error)
     return NextResponse.json(
