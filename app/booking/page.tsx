@@ -19,6 +19,7 @@ export default function BookingPage() {
     guestCount: '',
     location: '',
     address: '',
+    phoneNumber: '',
   })
   const [selectedProducts, setSelectedProducts] = useState<Record<string, number>>({})
   const [error, setError] = useState('')
@@ -97,6 +98,7 @@ export default function BookingPage() {
           guestCount: formData.guestCount,
           location: formData.location,
           address: formData.address,
+          phoneNumber: formData.phoneNumber,
           products: selectedProducts,
           totalAmount: calculateTotal(),
         }),
@@ -211,6 +213,17 @@ export default function BookingPage() {
                           <option key={loc} value={loc}>{loc}</option>
                         ))}
                       </select>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-semibold mb-2">Contact Number(Preferably WhatsApp)</label>
+                      <Input
+                        type="text"
+                        name="phoneNumber"
+                        value={formData.phoneNumber}
+                        onChange={handleInputChange}
+                        placeholder="+234 (0)800 123 4567"
+                      />
                     </div>
 
                     <div>

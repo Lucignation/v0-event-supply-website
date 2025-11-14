@@ -3,12 +3,16 @@ import { verifyToken } from './lib/auth'
 
 export function middleware(request: NextRequest) {
   const authToken = request.cookies.get('authToken')?.value
+  const role = request.cookies.get('userRole')?.value
+  console.log(role);
+  console.log(authToken)
 
   let isValidToken = false
   let userRole = 'caterer'
 
   if (authToken) {
     const decoded = verifyToken(authToken)
+    // console.log(decoded)
     if (decoded) {
       isValidToken = true
       userRole = (decoded as any).role || 'caterer'
@@ -17,7 +21,8 @@ export function middleware(request: NextRequest) {
 
   // Protect admin routes
   if (request.nextUrl.pathname.startsWith('/admin')) {
-    if (!isValidToken || userRole !== 'admin') {
+    // console.log(role)
+    if (!isValidToken || role !== 'admin') {
       return NextResponse.redirect(new URL('/login', request.url))
     }
   }

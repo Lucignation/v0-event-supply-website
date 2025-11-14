@@ -31,6 +31,7 @@ CREATE TABLE IF NOT EXISTS bookings (
   event_date DATE,
   event_time TIME,
   guest_count INT,
+  phone_number VARCHAR(20),
   location VARCHAR(255),
   address TEXT,
   total_amount DECIMAL(12, 2),

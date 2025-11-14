@@ -29,12 +29,15 @@ export async function POST(request: NextRequest) {
       guestCount,
       location,
       address,
+      phoneNumber,
       notes,
-      items,
+      products,
       totalAmount,
-    } = body
+    } = body;
 
-    if (!eventType || !eventDate || !guestCount || !items || !totalAmount) {
+    // console.log(body)
+
+    if (!eventType || !eventDate || !guestCount || !products || !totalAmount) {
       return NextResponse.json(
         { message: 'Missing required fields' },
         { status: 400 }
@@ -51,12 +54,12 @@ export async function POST(request: NextRequest) {
 
     const bookingId = bookingResult.rows[0].id
 
-    if (items && items.length > 0) {
-      for (const item of items) {
+    if (products && products.length > 0) {
+      for (const product of products) {
         await execute(
           `INSERT INTO public.booking_items (booking_id, product_id, quantity, unit_price, subtotal, created_at)
            VALUES ($1, $2, $3, $4, $5, NOW())`,
-          [bookingId, item.productId, item.quantity, item.unitPrice, item.subtotal]
+          [bookingId, product.productId, product.quantity, product.unitPrice, product.subtotal]
         )
       }
     }

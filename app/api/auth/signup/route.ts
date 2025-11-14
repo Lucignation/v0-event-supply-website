@@ -30,6 +30,7 @@ export async function POST(request: NextRequest) {
       business_name: businessName,
       phone,
       role: 'caterer',
+      // role: 'admin',
     })
 
     const token = await generateToken({

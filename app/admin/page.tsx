@@ -15,65 +15,44 @@ export default function AdminDashboard() {
   const [loading, setLoading] = useState(true)
   const [user, setUser] = useState<any>(null)
 
-  useEffect(() => {
-    const token = localStorage.getItem('authToken')
-    const role = localStorage.getItem('userRole')
+  // useEffect(() => {
+  //   const token = localStorage.getItem('authToken')
+  //   const role = localStorage.getItem('userRole')
 
-    if (!token || role !== 'admin') {
-      router.push('/login')
-      return
-    }
+  //   if (!token || role !== 'admin') {
+  //     router.push('/login')
+  //     return
+  //   }
 
-    setUserRole(role)
-    fetchData()
-  }, [router])
-
-  const fetchData = async () => {
-    try {
-      const response = await fetch('/api/admin/data')
-
-      if (!response.ok) {
-        router.push('/login')
-        return
-      }
-
-      const data = await response.json()
-      setOrders(data.orders || [])
-      setProducts(data.products || [])
-      setUser({ authenticated: true })
-    } catch (error) {
-      console.error('Error fetching data:', error)
-    } finally {
-      setLoading(false)
-    }
-  }
-
+  //   setUserRole(role)
+  //   fetchData()
+  // }, [router])
 
   
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const response = await fetch('/api/admin/data')
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch('/api/admin/data')
 
-  //       if (!response.ok) {
-  //         router.push('/login')
-  //         return
-  //       }
+        if (!response.ok) {
+          router.push('/login')
+          return
+        }
 
-  //       const data = await response.json()
-  //       setOrders(data.orders || [])
-  //       setProducts(data.products || [])
-  //       setUser({ authenticated: true })
-  //     } catch (error) {
-  //       console.error('Error fetching data:', error)
-  //     } finally {
-  //       setLoading(false)
-  //     }
-  //   }
+        const data = await response.json()
+        setOrders(data.orders || [])
+        setProducts(data.products || [])
+        setUser({ authenticated: true })
+      } catch (error) {
+        console.error('Error fetching data:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
 
-  //   fetchData()
-  // }, [router])
+    fetchData()
+  }, [router])
 
   const handleLogout = () => {
     localStorage.removeItem('authToken')
@@ -91,7 +70,7 @@ export default function AdminDashboard() {
     return <div className="min-h-screen flex items-center justify-center">Loading...</div>
   }
 
-   if (!user?.authenticated) {
+  if (!user?.authenticated) {
     return null
   }
 
