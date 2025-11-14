@@ -60,7 +60,7 @@ export default function CatererDashboard() {
       <header className="bg-primary text-primary-foreground sticky top-0 z-40 shadow-md">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold">EventFlow Dashboard</h1>
+            <h1 className="text-2xl font-bold">Aquoryx Dashboard</h1>
             <p className="text-primary-foreground/80 text-sm">Caterer Portal</p>
           </div>
           <button

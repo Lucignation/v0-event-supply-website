@@ -62,7 +62,7 @@ export default function AdminDashboard() {
       <header className="bg-primary text-primary-foreground sticky top-0 z-40 shadow-md">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold">EventFlow Admin</h1>
+            <h1 className="text-2xl font-bold">Aquoryx Admin</h1>
             <p className="text-primary-foreground/80 text-sm">Management Dashboard</p>
           </div>
           <button

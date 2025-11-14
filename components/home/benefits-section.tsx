@@ -27,7 +27,7 @@ export default function BenefitsSection() {
   return (
     <section className="py-16 bg-secondary">
       <div className="container mx-auto px-4">
-        <h2 className="text-4xl font-bold text-center mb-12 text-primary">Why Choose EventFlow?</h2>
+        <h2 className="text-4xl font-bold text-center mb-12 text-primary">Why Choose Aquoryx?</h2>
         <div className="grid md:grid-cols-4 gap-6">
           {benefits.map((benefit, i) => (
             <Card key={i} className="p-8 text-center hover:shadow-lg transition-shadow">

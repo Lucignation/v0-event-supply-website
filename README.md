@@ -1,4 +1,4 @@
-# EventFlow - Event Supplies Booking Platform
+# Aquoryx - Event Supplies Booking Platform
 
 A complete web application for caterers to book water, soft drinks, ice blocks, and event consumables with an integrated admin management system.
 

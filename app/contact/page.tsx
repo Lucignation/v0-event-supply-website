@@ -36,7 +36,7 @@ export default function ContactPage() {
               <Card className="p-8 text-center">
                 <div className="text-4xl mb-4">✉️</div>
                 <h3 className="font-bold text-lg mb-2">Email</h3>
-                <p className="text-foreground/80">hello@eventflow.ng</p>
+                <p className="text-foreground/80">hello@Aquoryx.ng</p>
                 <p className="text-sm text-foreground/60 mt-2">Response within 24 hours</p>
               </Card>
             </div>

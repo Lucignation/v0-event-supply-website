@@ -1,4 +1,5 @@
 import { Button } from '@/components/ui/button'
+import Image from 'next/image'
 import Link from 'next/link'
 
 export default function HeroSection() {
@@ -20,15 +21,16 @@ export default function HeroSection() {
                 </Button>
               </Link>
               <Link href="/services">
-                <Button size="lg" variant="outline" className="border-primary-foreground text-primary-foreground hover:bg-primary-foreground/10 text-lg">
+                <Button size="lg" variant="outline" className="border-primary-foreground text-accent-foreground hover:bg-primary-foreground/10 text-lg">
                   View Services
                 </Button>
               </Link>
             </div>
           </div>
-          <div className="bg-primary-foreground/10 rounded-xl p-8 text-center">
-            <div className="text-9xl mb-4">🎉</div>
-            <p className="text-lg">Fast Delivery • Quality Products • 24/7 Support</p>
+          <div className="bg-primary-foreground/10 rounded-xl flex items-center justify-center  text-center">
+            {/* <div className="text-9xl mb-4">🎉</div>
+            <p className="text-lg">Fast Delivery • Quality Products • 24/7 Support</p> */}
+            <Image src="/event.png" alt="Hero" width={700} height={700} className="rounded-xl" />
           </div>
         </div>
       </div>

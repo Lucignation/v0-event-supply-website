@@ -1,0 +1,60 @@
+# --- Node ---
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# --- Next.js build output ---
+.next/
+out/
+dist/
+
+# --- Build artifacts ---
+*.log
+*.cache
+*.tmp
+*.temp
+
+# --- Environment Variables ---
+.env
+.env.*       # .env.development, .env.production, etc.
+!.env.example # keep example
+
+# --- OS Files ---
+.DS_Store
+Thumbs.db
+
+# --- TypeScript ---
+*.tsbuildinfo
+
+# --- Local development ---
+.vscode/
+.idea/
+
+# --- Turbo Repo ---
+.turbo/
+
+# --- Prisma ---
+prisma/dev.db
+prisma/dev.db-journal
+prisma/*.sqlite
+prisma/*.db
+prisma/.cache/
+prisma/migrations/*-shadow.db
+
+# --- Docker ---
+docker-data/
+docker-compose.override.yml
+
+# --- Custom Files ---
+*.local
+*.pid
+*.seed
+
+# --- Build Tools ---
+coverage/
+reports/
+
+# --- Optional: Next.js Cache (Vercel) ---
+.vercel/

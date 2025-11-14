@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 
 export default function Footer() {
   return (
@@ -7,8 +8,8 @@ export default function Footer() {
         <div className="grid md:grid-cols-4 gap-8 mb-8">
           <div>
             <h3 className="font-bold text-lg mb-4 flex items-center gap-2">
-              <span className="text-accent text-2xl">⚡</span>
-              EventFlow
+              <Image src="/logo.png" alt="Logo" width={50} height={50} className="rounded-full" />
+              Aquoryx
             </h3>
             <p className="text-primary-foreground/80 text-sm">Premium beverage and event supplies for caterers.</p>
           </div>
@@ -35,12 +36,12 @@ export default function Footer() {
             <ul className="space-y-2 text-sm">
               <li>+234 (0)800 123 4567</li>
               <li><a href="https://wa.me/234900555888" className="hover:text-accent transition">WhatsApp</a></li>
-              <li>hello@eventflow.ng</li>
+              <li>hello@Aquoryx.ng</li>
             </ul>
           </div>
         </div>
         <div className="border-t border-primary-foreground/20 pt-8 text-center text-sm text-primary-foreground/80">
-          <p>&copy; 2025 EventFlow. All rights reserved.</p>
+          <p>&copy; 2025 Aquoryx. All rights reserved.</p>
         </div>
       </div>
     </footer>

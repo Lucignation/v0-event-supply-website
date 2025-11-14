@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { useState } from 'react'
+import Image from 'next/image'
 
 export default function Navigation() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
@@ -11,8 +12,8 @@ export default function Navigation() {
     <nav className="bg-primary text-primary-foreground sticky top-0 z-50 shadow-md">
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2 font-bold text-2xl">
-          <span className="text-accent text-3xl">⚡</span>
-          EventFlow
+          <Image src="/logo.png" alt="Logo" width={50} height={50} className="rounded-full" />
+          Aquoryx
         </Link>
 
         {/* Desktop Menu */}
