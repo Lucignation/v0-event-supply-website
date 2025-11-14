@@ -1,5 +1,6 @@
 'use client'
 
+import { Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Navigation from '@/components/navigation'
 import Footer from '@/components/footer'
@@ -7,7 +8,7 @@ import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import Link from 'next/link'
 
-export default function BookingConfirmationPage() {
+function ConfirmationContent() {
   const searchParams = useSearchParams()
   const bookingId = searchParams.get('id')
 
@@ -56,5 +57,13 @@ export default function BookingConfirmationPage() {
       </main>
       <Footer />
     </div>
+  )
+}
+
+export default function BookingConfirmationPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
+      <ConfirmationContent />
+    </Suspense>
   )
 }
