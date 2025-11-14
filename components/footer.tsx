@@ -36,7 +36,7 @@ export default function Footer() {
             <ul className="space-y-2 text-sm">
               <li>+234 (0)800 123 4567</li>
               <li><a href="https://wa.me/234900555888" className="hover:text-accent transition">WhatsApp</a></li>
-              <li>hello@Aquoryx.ng</li>
+              <li>hello@aquoryx.ng</li>
             </ul>
           </div>
         </div>
