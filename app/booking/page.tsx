@@ -7,6 +7,7 @@ import Footer from '@/components/footer'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card } from '@/components/ui/card'
+import ProtectedNavigation from '@/components/protected-navigation'
 
 export default function BookingPage() {
   const router = useRouter()
@@ -124,7 +125,8 @@ export default function BookingPage() {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <Navigation />
+      {/* <Navigation /> */}
+      <ProtectedNavigation title="Event Booking" subtitle="Book your event supplies" />
       <main className="flex-1 py-8 bg-secondary">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">

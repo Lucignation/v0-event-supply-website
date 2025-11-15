@@ -5,6 +5,10 @@ import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
+import ProtectedNavigation from '@/components/protected-navigation'
+import { formatCurrency } from '@/util/helper'
+import moment from 'moment'
+import { Modal } from '@/components/modal'
 
 export default function AdminDashboard() {
   const router = useRouter()
@@ -13,7 +17,10 @@ export default function AdminDashboard() {
   const [orders, setOrders] = useState<any[]>([])
   const [products, setProducts] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
+  const [loadingUpdate, setLoadingUpdate] = useState(false)
   const [user, setUser] = useState<any>(null)
+  const [open, setOpen] = useState(false);
+  const [selectedOrder, setSelectedOrder] = useState<any>(null);
 
   useEffect(() => {
     const token = localStorage.getItem('authToken')
@@ -30,7 +37,8 @@ export default function AdminDashboard() {
 
   const fetchData = async () => {
     try {
-      const response = await fetch('/api/admin/data')
+      // const response = await fetch('/api/admin/data')
+      const response = await fetch('/api/bookings')
 
       if (!response.ok) {
         router.push('/login')
@@ -38,7 +46,7 @@ export default function AdminDashboard() {
       }
 
       const data = await response.json()
-      setOrders(data.orders || [])
+      setOrders(data.bookings || [])
       setProducts(data.products || [])
       setUser({ authenticated: true })
     } catch (error) {
@@ -82,9 +90,30 @@ export default function AdminDashboard() {
     router.push('/')
   }
 
-  const handleConfirmDelivery = (orderId: string) => {
-    alert(`Delivery confirmed for order ${orderId}`)
-    // TODO: Call API to update order status
+  const handleConfirmDelivery = async (orderId: string) => {
+    setLoadingUpdate(true)
+    try {
+      const response = await fetch(`/api/bookings/status`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ bookingId: orderId, status: 'confirmed' }),
+      })
+  
+      if (!response.ok) {
+        router.push('/login')
+        return
+      }
+  
+      const data = await response.json()
+      setOpen(false)
+      fetchData()
+    } catch (error) {
+      console.error('Error confirming delivery:', error)
+    } finally {
+      setLoadingUpdate(false)
+    }
   }
 
   if (loading) {
@@ -98,20 +127,7 @@ export default function AdminDashboard() {
   return (
     <div className="min-h-screen bg-secondary">
       {/* Header */}
-      <header className="bg-primary text-primary-foreground sticky top-0 z-40 shadow-md">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <div>
-            <h1 className="text-2xl font-bold">Aquoryx Admin</h1>
-            <p className="text-primary-foreground/80 text-sm">Management Dashboard</p>
-          </div>
-          <button
-            onClick={handleLogout}
-            className="bg-accent text-accent-foreground px-6 py-2 rounded-lg hover:bg-accent/90 transition"
-          >
-            Logout
-          </button>
-        </div>
-      </header>
+      <ProtectedNavigation title="Aquoryx Admin" subtitle="Management Dashboard" />
 
       <main className="container mx-auto px-4 py-8">
         {/* Tabs */}
@@ -168,6 +184,8 @@ export default function AdminDashboard() {
                       <th className="text-left py-3 px-4 font-semibold">Event Type</th>
                       <th className="text-left py-3 px-4 font-semibold">Amount</th>
                       <th className="text-left py-3 px-4 font-semibold">Date</th>
+                      <th className="text-left py-3 px-4 font-semibold">Time</th>
+                      <th className="text-left py-3 px-4 font-semibold">Guest Count</th>
                       <th className="text-left py-3 px-4 font-semibold">Status</th>
                       <th className="text-left py-3 px-4 font-semibold">Action</th>
                     </tr>
@@ -176,10 +194,12 @@ export default function AdminDashboard() {
                     {orders.map((order, i) => (
                       <tr key={i} className="border-b border-border hover:bg-background transition">
                         <td className="py-3 px-4 font-mono text-xs">{order.id}</td>
-                        <td className="py-3 px-4">{order.caterer || 'N/A'}</td>
-                        <td className="py-3 px-4">{order.eventType}</td>
-                        <td className="py-3 px-4 font-bold text-accent">₦{order.totalAmount?.toLocaleString()}</td>
-                        <td className="py-3 px-4">{order.eventDate}</td>
+                        <td className="py-3 px-4">{order.business_name || 'N/A'}</td>
+                        <td className="py-3 px-4">{order.event_type}</td>
+                        <td className="py-3 px-4 font-bold text-accent">{formatCurrency(order.total_amount)}</td>
+                        <td className="py-3 px-4">{moment(order.event_date).format("MMMM D, YYYY")}</td>
+                        <td className="py-3 px-4">{order.event_time}</td>
+                        <td className="py-3 px-4">{order.guest_count}</td>
                         <td className="py-3 px-4">
                           <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
                             order.status === 'completed' ? 'bg-green-100 text-green-800' :
@@ -191,10 +211,10 @@ export default function AdminDashboard() {
                         </td>
                         <td className="py-3 px-4">
                           <button
-                            onClick={() => handleConfirmDelivery(order.id)}
+                            onClick={() => {setOpen(true); setSelectedOrder(order)}}
                             className="text-primary hover:underline font-semibold text-sm"
                           >
-                            Confirm
+                            View
                           </button>
                         </td>
                       </tr>
@@ -308,6 +328,36 @@ export default function AdminDashboard() {
           </Card>
         )}
       </main>
+
+      <Modal open={open} onOpenChange={setOpen} title={`Confirm Delivery for ${selectedOrder?.business_name}`}>
+        <p className="text-sm text-neutral-600 dark:text-neutral-300">
+          Event Date: {moment(selectedOrder?.event_date).format('MMMM DD, YYYY')}
+        </p>
+        <p className="text-sm text-neutral-600 dark:text-neutral-300">
+          Event Time: {selectedOrder?.event_time}
+        </p>
+        <p className="text-sm text-neutral-600 dark:text-neutral-300">
+          Guest Count: {selectedOrder?.guest_count}
+        </p>
+        <p className="text-sm text-neutral-600 dark:text-neutral-300">
+          Total Amount: {formatCurrency(selectedOrder?.total_amount)}
+        </p>
+        <p className="text-sm text-neutral-600 dark:text-neutral-300">
+          Event Location: {selectedOrder?.location}
+        </p>
+        <p className="text-sm text-neutral-600 dark:text-neutral-300">
+          Event Address: {selectedOrder?.address}
+        </p>
+        <p className="text-sm text-neutral-600 dark:text-neutral-300">
+          Caterer Phone: {selectedOrder?.phone}
+        </p>
+        <p className="text-sm text-neutral-600 dark:text-neutral-300">
+          Caterer Email: {selectedOrder?.email}
+        </p>
+        <Button className="bg-primary hover:bg-primary/90 text-primary-foreground mt-6" onClick={() => handleConfirmDelivery(selectedOrder?.id)}>
+          {loadingUpdate ? 'Confirming...' : 'Confirm Delivery'}
+        </Button>
+      </Modal>
     </div>
   )
 }
