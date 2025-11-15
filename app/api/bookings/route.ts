@@ -24,7 +24,7 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     console.error('Error fetching bookings:', error);
     return NextResponse.json(
-      { message: 'An error occurred while fetching bookings' },
+      { message: 'An error occurred while fetching bookings.' },
       { status: 500 }
     );
   }
