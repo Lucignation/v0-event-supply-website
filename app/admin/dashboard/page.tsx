@@ -12,6 +12,7 @@ import { Modal } from '@/components/modal'
 import { useBookings } from '@/hooks/useBookings'
 import { useProducts } from '@/hooks/useProducts'
 import { toast } from 'sonner'
+import { useCustomers } from '@/hooks/useCaterer'
 
 export default function AdminDashboard() {
   const router = useRouter()
@@ -26,9 +27,11 @@ export default function AdminDashboard() {
   const [selectedOrder, setSelectedOrder] = useState<any>(null);
   const [editProduct, setEditProduct] = useState<any>(null);
   const [canAddProduct, setCanAddProduct] = useState(false)
+  const [customers, setCustomers] = useState<any[]>([])
 
   const { data: ordersData, isLoading: bookingsLoading, refetch: refetchBookings } = useBookings();
   const { data: productsData, isLoading: productsLoading, refetch: refetchProducts } = useProducts();
+  const { data: customersData, isLoading: customersLoading, refetch: refetchCustomers } = useCustomers();
 
 
   // console.log(productsData, ordersData)
@@ -45,8 +48,9 @@ export default function AdminDashboard() {
     setUserRole(role)
     setOrders(ordersData?.bookings || [])
     setProducts(productsData?.products || [])
+    setCustomers(customersData?.customers || [])
     // fetchData()
-  }, [router, ordersData, productsData])
+  }, [router, ordersData, productsData, customersData])
 
   // const fetchData = async () => {
   //   try {
@@ -109,8 +113,6 @@ export default function AdminDashboard() {
   const onEdit = (product: any) => {
     setEditProduct(product)
   }
-
-  console.log(orders, products)
 
   const handleConfirmDelivery = async (orderId: string) => {
     setLoadingUpdate(true)
@@ -416,32 +418,45 @@ export default function AdminDashboard() {
                     <th className="text-left py-3 px-4 font-semibold">Business Name</th>
                     <th className="text-left py-3 px-4 font-semibold">Contact</th>
                     <th className="text-left py-3 px-4 font-semibold">Phone</th>
-                    <th className="text-left py-3 px-4 font-semibold">Orders</th>
+                    <th className="text-left py-3 px-4 font-semibold">Bookings</th>
                     <th className="text-left py-3 px-4 font-semibold">Total Spent</th>
                     <th className="text-left py-3 px-4 font-semibold">Status</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {[
-                    { name: 'Premium Catering', email: 'hello@premium.ng', phone: '+234 800 111 2222', orders: 12, spent: 450000, status: 'Active' },
-                    { name: 'Elite Events', email: 'info@elite.ng', phone: '+234 800 333 4444', orders: 8, spent: 320000, status: 'Active' },
-                    { name: 'Luxury Parties', email: 'contact@luxury.ng', phone: '+234 800 555 6666', orders: 5, spent: 180000, status: 'Inactive' },
-                  ].map((customer, i) => (
-                    <tr key={i} className="border-b border-border hover:bg-background transition">
-                      <td className="py-3 px-4 font-semibold">{customer.name}</td>
-                      <td className="py-3 px-4">{customer.email}</td>
-                      <td className="py-3 px-4">{customer.phone}</td>
-                      <td className="py-3 px-4">{customer.orders}</td>
-                      <td className="py-3 px-4 font-bold text-accent">₦{customer.spent.toLocaleString()}</td>
-                      <td className="py-3 px-4">
-                        <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                          customer.status === 'Active' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
-                        }`}>
-                          {customer.status}
-                        </span>
-                      </td>
-                    </tr>
-                  ))}
+                {customers?.map((customer) => {
+  const totalRevenue = customer.bookings?.reduce(
+    (total: number, booking: any) => total + Number(booking.total_amount || 0), 
+    0
+  ) || 0;
+
+  return (
+    <tr 
+      key={customer.id} 
+      className="border-b border-border hover:bg-muted/50 transition cursor-pointer"
+      onClick={() => router.push(`/customers/${customer.id}`)}
+    >
+      <td className="py-3 px-4 font-semibold">
+        {customer.business_name || customer.full_name}
+      </td>
+      <td className="py-3 px-4">{customer.email}</td>
+      <td className="py-3 px-4">{customer.phone}</td>
+      <td className="py-3 px-4 text-center">
+        {customer.bookings?.length || 0}
+      </td>
+      <td className="py-3 px-4 font-bold text-accent">
+        ₦{totalRevenue.toLocaleString('en-NG', { minimumFractionDigits: 2 })}
+      </td>
+      <td className="py-3 px-4">
+        <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
+          customer.bookings?.length ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
+        }`}>
+          {customer.bookings?.length ? 'Active' : 'Inactive'}
+        </span>
+      </td>
+    </tr>
+  );
+})}
                 </tbody>
               </table>
             </div>
