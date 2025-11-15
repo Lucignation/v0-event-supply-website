@@ -9,6 +9,9 @@ import ProtectedNavigation from '@/components/protected-navigation'
 import { formatCurrency } from '@/util/helper'
 import moment from 'moment'
 import { Modal } from '@/components/modal'
+import { useBookings } from '@/hooks/useBookings'
+import { useProducts } from '@/hooks/useProducts'
+import { toast } from 'sonner'
 
 export default function AdminDashboard() {
   const router = useRouter()
@@ -21,6 +24,14 @@ export default function AdminDashboard() {
   const [user, setUser] = useState<any>(null)
   const [open, setOpen] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState<any>(null);
+  const [editProduct, setEditProduct] = useState<any>(null);
+  const [canAddProduct, setCanAddProduct] = useState(false)
+
+  const { data: ordersData, isLoading: bookingsLoading, refetch: refetchBookings } = useBookings();
+  const { data: productsData, isLoading: productsLoading, refetch: refetchProducts } = useProducts();
+
+
+  // console.log(productsData, ordersData)
 
   useEffect(() => {
     const token = localStorage.getItem('authToken')
@@ -32,29 +43,34 @@ export default function AdminDashboard() {
     }
 
     setUserRole(role)
-    fetchData()
-  }, [router])
+    setOrders(ordersData?.bookings || [])
+    setProducts(productsData?.products || [])
+    // fetchData()
+  }, [router, ordersData, productsData])
 
-  const fetchData = async () => {
-    try {
-      // const response = await fetch('/api/admin/data')
-      const response = await fetch('/api/bookings')
+  // const fetchData = async () => {
+  //   try {
+  //     // const response = await fetch('/api/admin/data')
+  //     const response = await fetch('/api/bookings')
+  //     const productsResponse = await fetch('/api/products')
 
-      if (!response.ok) {
-        router.push('/login')
-        return
-      }
+  //     if (!response.ok && !productsResponse.ok) {
+  //       router.push('/login')
+  //       return
+  //     }
 
-      const data = await response.json()
-      setOrders(data.bookings || [])
-      setProducts(data.products || [])
-      setUser({ authenticated: true })
-    } catch (error) {
-      console.error('Error fetching data:', error)
-    } finally {
-      setLoading(false)
-    }
-  }
+  //     const data = await response.json()
+  //     const productData = await productsResponse.json()
+  //     console.log(productData)
+  //     setOrders(data.bookings || [])
+  //     setProducts(data.products || [])
+  //     setUser({ authenticated: true })
+  //   } catch (error) {
+  //     console.error('Error fetching data:', error)
+  //   } finally {
+  //     setLoading(false)
+  //   }
+  // }
 
 
   
@@ -90,6 +106,12 @@ export default function AdminDashboard() {
     router.push('/')
   }
 
+  const onEdit = (product: any) => {
+    setEditProduct(product)
+  }
+
+  console.log(orders, products)
+
   const handleConfirmDelivery = async (orderId: string) => {
     setLoadingUpdate(true)
     try {
@@ -108,7 +130,7 @@ export default function AdminDashboard() {
   
       const data = await response.json()
       setOpen(false)
-      fetchData()
+      refetchBookings()
     } catch (error) {
       console.error('Error confirming delivery:', error)
     } finally {
@@ -116,13 +138,100 @@ export default function AdminDashboard() {
     }
   }
 
-  if (loading) {
+  if (bookingsLoading || productsLoading) {
     return <div className="min-h-screen flex items-center justify-center">Loading...</div>
   }
 
-   if (!user?.authenticated) {
-    return null
+  const handleSavePricing = async () => {
+    setLoadingUpdate(true)
+    try {
+      const response = await fetch(`/api/products/pricing`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ products }),
+      })
+  
+      if (!response.ok) {
+        console.error('Error updating product:', response)
+        toast.error('Error updating product')
+        // router.push('/login')
+        return
+      }
+  
+      const data = await response.json()
+      setOpen(false)
+      refetchProducts()
+    } catch (error) {
+      toast.error('Error updating product')
+      console.error('Error confirming delivery:', error)
+    } finally {
+      setLoadingUpdate(false)
+    }
   }
+
+  const updateProduct = async () => {
+    setLoadingUpdate(true)
+    try {
+      const response = await fetch(`/api/products/pricing`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(editProduct),
+      })
+  
+      if (!response.ok) {
+        toast.error('Error updating product')
+        // router.push('/login')
+        return
+      }
+  
+      await response.json()
+      toast.success('Product updated successfully')
+      refetchProducts()
+      setEditProduct(null)
+    } catch (error) {
+      toast.error('Error updating product')
+      console.error('Error updating product:', error)
+    } finally {
+      setLoadingUpdate(false)
+    }
+  }
+
+  const handleAddProduct = async () => {
+    setLoadingUpdate(true)
+    try {
+      const response = await fetch(`/api/products`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(editProduct),
+      })
+  
+      if (!response.ok) {
+        toast.error('Error updating product')
+        // router.push('/login')
+        return
+      }
+  
+      await response.json()
+      toast.success('Product updated successfully')
+      refetchProducts()
+      setEditProduct(null)
+    } catch (error) {
+      toast.error('Error updating product')
+      console.error('Error updating product:', error)
+    } finally {
+      setLoadingUpdate(false)
+    }
+  }
+
+  //  if (!user?.authenticated) {
+  //   return null
+  // }
 
   return (
     <div className="min-h-screen bg-secondary">
@@ -152,19 +261,23 @@ export default function AdminDashboard() {
           <div className="space-y-6">
             <div className="grid md:grid-cols-4 gap-6">
               <Card className="p-6">
-                <div className="text-4xl font-bold text-primary">{orders.length}</div>
+                <div className="text-4xl font-bold text-primary">{orders?.length}</div>
                 <p className="text-foreground/70 text-sm mt-2">Total Orders</p>
               </Card>
               <Card className="p-6">
-                <div className="text-4xl font-bold text-accent">{orders.filter(o => o.status === 'pending').length}</div>
+                <div className="text-4xl font-bold text-accent">{orders?.length ? orders?.filter((o: any) => o.status === 'pending').length : 0}</div>
                 <p className="text-foreground/70 text-sm mt-2">Pending</p>
               </Card>
               <Card className="p-6">
-                <div className="text-4xl font-bold text-primary">{orders.filter(o => o.status === 'completed').length}</div>
+                <div className="text-4xl font-bold text-primary">{orders?.length ? orders?.filter((o: any) => o.status === 'confirmed').length : 0}</div>
+                <p className="text-foreground/70 text-sm mt-2">Confirmed</p>
+              </Card>
+              <Card className="p-6">
+                <div className="text-4xl font-bold text-primary">{orders?.length ? orders?.filter((o: any) => o.status === 'completed').length : 0}</div>
                 <p className="text-foreground/70 text-sm mt-2">Completed</p>
               </Card>
               <Card className="p-6">
-                <div className="text-4xl font-bold text-accent">₦{orders.reduce((sum, o) => sum + (o.totalAmount || 0), 0).toLocaleString()}</div>
+                <div className="text-4xl font-bold text-accent">₦{orders?.length ? orders?.reduce((sum: any, o: any) => sum + (o.totalAmount || 0), 0).toLocaleString() : 0}</div>
                 <p className="text-foreground/70 text-sm mt-2">Revenue</p>
               </Card>
             </div>
@@ -191,7 +304,7 @@ export default function AdminDashboard() {
                     </tr>
                   </thead>
                   <tbody>
-                    {orders.map((order, i) => (
+                    {orders?.length ? orders?.map((order: any, i: any) => (
                       <tr key={i} className="border-b border-border hover:bg-background transition">
                         <td className="py-3 px-4 font-mono text-xs">{order.id}</td>
                         <td className="py-3 px-4">{order.business_name || 'N/A'}</td>
@@ -218,7 +331,7 @@ export default function AdminDashboard() {
                           </button>
                         </td>
                       </tr>
-                    ))}
+                    )) : null}
                   </tbody>
                 </table>
               </div>
@@ -231,41 +344,43 @@ export default function AdminDashboard() {
           <div className="space-y-6">
             <div className="flex justify-between items-center">
               <h2 className="text-2xl font-bold text-primary">Products</h2>
-              <Button className="bg-primary hover:bg-primary/90 text-primary-foreground">
+              <Button className="bg-primary hover:bg-primary/90 text-primary-foreground" onClick={() => setCanAddProduct(true)}>
                 + Add Product
               </Button>
             </div>
 
-            <Card className="p-8">
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {products.map((product, i) => (
+            {!products?.length && !productsLoading ? <p>No products found</p> : (
+              <Card className="p-8">
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {products?.map((product: any, i: number) => (
                   <Card key={i} className="p-6">
-                    <h3 className="font-semibold mb-2">{product.name}</h3>
-                    <p className="text-accent font-bold mb-4">₦{product.price}</p>
+                    {editProduct && editProduct.id === product.id ? <Input type="text" value={editProduct.name || ''} onChange={(e) => setEditProduct({ ...editProduct, name: e.target.value })} /> : <h3 className="font-semibold mb-2">{product.name}</h3>}
+                    {editProduct && editProduct.id === product.id ? <Input type="number" value={editProduct.price || 0} onChange={(e) => setEditProduct({ ...editProduct, price: e.target.value })} /> :  <p className="text-accent font-bold mb-4">₦{product.price}</p>}
                     <p className="text-foreground/70 text-sm mb-4">Category: {product.category}</p>
-                    <p className="text-foreground/70 text-sm mb-6">Stock: {product.stock}</p>
+                    {editProduct && editProduct.id === product.id ? <Input type="number" value={editProduct.stock || 0} onChange={(e) => setEditProduct({ ...editProduct, stock: e.target.value })} /> : <p className="text-foreground/70 text-sm mb-6">Stock: {product.stock}</p>}
+                    {editProduct && editProduct?.id === product.id ? <div className="flex gap-2">
+                      <Button variant="outline" size="sm" className="flex-1" onClick={() => setEditProduct(null)}>Cancel</Button>
+                      <Button variant="default" size="sm" className="flex-1" onClick={updateProduct}>Update Product</Button>
+                    </div> : 
                     <div className="flex gap-2">
-                      <Button variant="outline" size="sm" className="flex-1">Edit</Button>
-                      <Button variant="outline" size="sm" className="flex-1">Delete</Button>
-                    </div>
+                      <Button variant="outline" size="sm" className="flex-1" onClick={() => onEdit(product)}>Edit</Button>
+                      <Button variant="destructive" size="sm" className="flex-1">Delete</Button>
+                      
+                    </div>}
                   </Card>
                 ))}
               </div>
-            </Card>
+            </Card> 
+            )}
           </div>
         )}
 
         {/* Pricing Tab */}
         {activeTab === 'pricing' && (
-          <Card className="p-8">
+          !products?.length && !productsLoading ? <p>No products found</p> : <Card className="p-8">
             <h2 className="text-2xl font-bold text-primary mb-6">Update Pricing</h2>
             <div className="space-y-4 max-w-2xl">
-              {[
-                { name: 'Water 500ml', price: 100 },
-                { name: 'Water 1.5L', price: 250 },
-                { name: 'Cola 500ml', price: 150 },
-                { name: 'Ice Block Large', price: 2000 },
-              ].map((item, i) => (
+              {products?.map((item: any, i: number) => (
                 <div key={i} className="flex items-center gap-4">
                   <label className="flex-1 font-semibold">{item.name}</label>
                   <div className="flex items-center gap-2">
@@ -274,11 +389,16 @@ export default function AdminDashboard() {
                       type="number"
                       defaultValue={item.price}
                       className="w-24"
+                      onChange={(e) => {
+                        const newProducts = [...products];
+                        newProducts[i].price = e.target.value;
+                        setProducts(newProducts);
+                      }}
                     />
                   </div>
                 </div>
               ))}
-              <Button className="bg-primary hover:bg-primary/90 text-primary-foreground mt-6">
+              <Button className="bg-primary hover:bg-primary/90 text-primary-foreground mt-6" onClick={handleSavePricing}>
                 Save Pricing
               </Button>
             </div>
@@ -357,6 +477,14 @@ export default function AdminDashboard() {
         <Button className="bg-primary hover:bg-primary/90 text-primary-foreground mt-6" onClick={() => handleConfirmDelivery(selectedOrder?.id)}>
           {loadingUpdate ? 'Confirming...' : 'Confirm Delivery'}
         </Button>
+      </Modal>
+
+      <Modal open={canAddProduct} onOpenChange={setCanAddProduct} title="Add Product">
+        <Input type="text" placeholder="Product Name" />
+        <Input type="text" placeholder="Product Category" />
+        <Input type="number" placeholder="Product Price" />
+        <Input type="number" placeholder="Product Stock" />
+        <Button className="bg-primary hover:bg-primary/90 text-primary-foreground mt-6" onClick={handleAddProduct}>Add Product</Button>
       </Modal>
     </div>
   )

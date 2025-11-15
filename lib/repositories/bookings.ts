@@ -75,7 +75,40 @@ export const BookingRepository = {
     return { ...booking, items };
   },
 
-  async create(data: {
+//   async create(data: {
+//     userId: string;
+//     eventType?: string;
+//     eventDate?: Date;
+//     eventTime?: string;
+//     guestCount?: number;
+//     location?: string;
+//     address?: string;
+//     totalAmount?: number;
+//     notes?: string;
+//   }): Promise<Booking> {
+//     return queryOne<Booking>(
+//       `INSERT INTO public.bookings (
+//         user_id, event_type, event_date, event_time, 
+//         guest_count, location, address, total_amount, notes,
+//         created_at, updated_at
+//       )
+//       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, NOW(), NOW())
+//       RETURNING *`,
+//       [
+//         data.userId,
+//         data.eventType,
+//         data.eventDate,
+//         data.eventTime,
+//         data.guestCount,
+//         data.location,
+//         data.address,
+//         data.totalAmount,
+//         data.notes,
+//       ]
+//     ) as Promise<Booking>;
+//   },
+
+async create(data: {
     userId: string;
     eventType?: string;
     eventDate?: Date;
@@ -85,29 +118,69 @@ export const BookingRepository = {
     address?: string;
     totalAmount?: number;
     notes?: string;
+    items: Array<{
+      productId: string;
+      quantity: number;
+      unitPrice: number;
+    }>;
   }): Promise<Booking> {
-    return queryOne<Booking>(
-      `INSERT INTO public.bookings (
-        user_id, event_type, event_date, event_time, 
-        guest_count, location, address, total_amount, notes,
-        created_at, updated_at
-      )
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, NOW(), NOW())
-      RETURNING *`,
-      [
-        data.userId,
-        data.eventType,
-        data.eventDate,
-        data.eventTime,
-        data.guestCount,
-        data.location,
-        data.address,
-        data.totalAmount,
-        data.notes,
-      ]
-    ) as Promise<Booking>;
+  
+    try {
+  
+      // 1. Insert booking
+      const bookingRes = await queryOne(
+        `
+        INSERT INTO public.bookings (
+          user_id, event_type, event_date, event_time,
+          guest_count, location, address, total_amount, notes,
+          status, payment_status,
+          created_at, updated_at
+        )
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, 'pending', 'unpaid', NOW(), NOW())
+        RETURNING *
+        `,
+        [
+          data.userId,
+          data.eventType,
+          data.eventDate,
+          data.eventTime,
+          data.guestCount,
+          data.location,
+          data.address,
+          data.totalAmount,
+          data.notes,
+        ]
+      );
+  
+      const booking = bookingRes;
+      const bookingId = booking.id;
+  
+      // 2. Insert items
+      for (const item of data.items) {
+        await queryOne(
+          `
+          INSERT INTO public.booking_items (
+            booking_id, product_id, quantity, unit_price, subtotal, created_at
+          )
+          VALUES ($1, $2, $3, $4, $5, NOW())
+          `,
+          [
+            bookingId,
+            item.productId,
+            item.quantity,
+            item.unitPrice,
+            item.quantity * item.unitPrice,
+          ]
+        );
+      }
+  
+      return booking;
+    } catch (error) {
+      throw error;
+    }
   },
-
+  
+    
   async update(
     bookingId: string,
     data: Partial<{

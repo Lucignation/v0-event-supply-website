@@ -74,4 +74,19 @@ export const ProductRepository = {
     );
     return result.length > 0;
   },
+
+  async updatePricing(data: {
+    id: string;
+    price: number;
+    stock: number;
+    name: string;
+  }): Promise<Product | null> {
+    return queryOne<Product>(
+      `UPDATE public.products 
+       SET price = $1, stock = $2, name = $3, updated_at = NOW()
+       WHERE id = $4
+       RETURNING *`,
+      [data.price, data.stock, data.name, data.id]
+    );
+  },
 };

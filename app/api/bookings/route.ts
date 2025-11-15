@@ -2,6 +2,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { BookingRepository } from '@/lib/repositories/bookings';
 import { verifyToken } from '@/lib/auth';
+import { products } from '@/data/product';
 
 export async function GET(request: NextRequest) {
   try {
@@ -45,6 +46,12 @@ export async function POST(request: NextRequest) {
     const userId = (decoded as any).userId;
     const body = await request.json();
 
+    const itemsArray = Object.entries(body.products).map(([productId, quantity]) => ({
+        productId,
+        quantity: Number(quantity),
+        unitPrice: products.find(p => p.id === productId)?.price || 0 // map from your product price list
+      }));
+
     const booking = await BookingRepository.create({
       userId,
       eventType: body.eventType,
@@ -55,6 +62,7 @@ export async function POST(request: NextRequest) {
       address: body.address,
       totalAmount: body.totalAmount,
       notes: body.notes,
+      items: itemsArray,
     });
 
     return NextResponse.json({ booking }, { status: 201 });

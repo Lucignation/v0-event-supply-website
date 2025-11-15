@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card } from '@/components/ui/card'
 import ProtectedNavigation from '@/components/protected-navigation'
+import { products } from '@/data/product'
 
 export default function BookingPage() {
   const router = useRouter()
@@ -25,19 +26,6 @@ export default function BookingPage() {
   const [selectedProducts, setSelectedProducts] = useState<Record<string, number>>({})
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
-
-  const products = [
-    { id: 'water-500', name: 'Water 500ml', price: 100, category: 'Water' },
-    { id: 'water-1.5l', name: 'Water 1.5L', price: 250, category: 'Water' },
-    { id: 'water-5l', name: 'Water 5L Container', price: 500, category: 'Water' },
-    { id: 'cola', name: 'Cola 500ml', price: 150, category: 'Soft Drinks' },
-    { id: 'fanta', name: 'Fanta 500ml', price: 150, category: 'Soft Drinks' },
-    { id: 'juice-1l', name: 'Juice Pack 1L', price: 300, category: 'Soft Drinks' },
-    { id: 'ice-large', name: 'Ice Block Large', price: 2000, category: 'Ice' },
-    { id: 'ice-standard', name: 'Ice Block Standard', price: 1500, category: 'Ice' },
-    { id: 'cups-50', name: 'Cups (50pc)', price: 500, category: 'Disposables' },
-    { id: 'plates-100', name: 'Plates (100pc)', price: 1200, category: 'Disposables' },
-  ]
 
   const locations = [
     'Lagos Island',
@@ -89,7 +77,7 @@ export default function BookingPage() {
 
     setLoading(true)
     try {
-      const response = await fetch('/api/bookings/create', {
+      const response = await fetch('/api/bookings', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
