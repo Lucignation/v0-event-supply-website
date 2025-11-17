@@ -9,6 +9,7 @@ import { useState, useEffect } from "react"
 import { useProducts } from "@/hooks/useProducts"
 import { useRouter } from "next/navigation"
 import { Modal } from "@/components/modal"
+import { Loader } from "lucide-react"
 
 export default function BrowseProducts() {
     const [products, setProducts] = useState<any[]>([])
@@ -29,6 +30,14 @@ export default function BrowseProducts() {
         setProducts(productsData?.products || [])
         // fetchData()
       }, [router, productsData])
+
+      if (productsLoading) {
+        return (
+          <div className="min-h-screen flex items-center justify-center">
+            <Loader className="animate-spin" />
+          </div>
+        )
+      }
 
       
     return (

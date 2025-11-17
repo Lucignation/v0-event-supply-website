@@ -8,8 +8,8 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card } from '@/components/ui/card'
 import ProtectedNavigation from '@/components/protected-navigation'
-import { products } from '@/data/product'
 import BackArrow from '@/components/BackArrow/BackArrow'
+import { useProducts } from '@/hooks/useProducts'
 
 export default function BookingPage() {
   const router = useRouter()
@@ -27,6 +27,22 @@ export default function BookingPage() {
   const [selectedProducts, setSelectedProducts] = useState<Record<string, number>>({})
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+  const [products, setProducts] = useState([])
+
+  const { data: productsData, isLoading: productsLoading, refetch: refetchProducts } = useProducts();
+
+
+  useEffect(() => {
+    const token = localStorage.getItem('authToken')
+    const role = localStorage.getItem('userRole')
+
+    if (!token || role !== 'caterer') {
+      router.push('/login')
+      return
+    }
+    setProducts(productsData?.products || [])
+    // fetchData()
+  }, [router, productsData])
 
   const locations = [
     'Lagos Island',
@@ -65,7 +81,7 @@ export default function BookingPage() {
 
   const calculateTotal = () => {
     return Object.entries(selectedProducts).reduce((total, [productId, quantity]) => {
-      const product = products.find(p => p.id === productId)
+      const product: any = products.find((p: any) => p.id === productId)
       return total + (product?.price || 0) * quantity
     }, 0)
   }
@@ -247,11 +263,11 @@ export default function BookingPage() {
                   <h2 className="text-2xl font-bold text-primary mb-6">Select Products</h2>
                   
                   <div className="space-y-6">
-                    {['Water', 'Soft Drinks', 'Ice', 'Disposables'].map(category => (
+                    {['Water', 'Soft Drinks', 'Ice', 'Disposables', 'Drink'].map(category => (
                       <div key={category}>
                         <h3 className="font-bold text-lg text-primary mb-3">{category}</h3>
                         <div className="grid md:grid-cols-2 gap-4">
-                          {products.filter(p => p.category === category).map(product => (
+                          {products.filter((p: any) => p.category === category).map((product: any) => (
                             <Card key={product.id} className="p-4">
                               <div className="flex justify-between items-start mb-3">
                                 <div>
@@ -324,7 +340,7 @@ export default function BookingPage() {
                       <h3 className="font-bold mb-3">Order Summary</h3>
                       <div className="space-y-2 text-sm">
                         {Object.entries(selectedProducts).map(([productId, quantity]) => {
-                          const product = products.find(p => p.id === productId)
+                          const product: any = products.find((p: any) => p.id === productId)
                           return (
                             <div key={productId} className="flex justify-between">
                               <span>{product?.name} × {quantity}</span>

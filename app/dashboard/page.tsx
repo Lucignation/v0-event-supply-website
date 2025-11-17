@@ -8,13 +8,48 @@ import Link from 'next/link'
 import moment from 'moment'
 import { formatCurrency } from '@/util/helper'
 import { StatusBadge } from '@/components/StatusBadge/StatusBadge'
+import { useUserDetail } from '@/hooks/useUserDetail'
+import { toast } from 'sonner'
+import { Loader } from 'lucide-react'
 
 export default function CatererDashboard() {
   const router = useRouter()
   const [user, setUser] = useState<any>(null)
   const [bookings, setBookings] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
-  const [activeTab, setActiveTab] = useState('overview')
+  const [activeTab, setActiveTab] = useState('overview');
+  const [updatingUser, setUpdatingUser] = useState(false);
+
+  const { data: userDetail } = useUserDetail();
+
+  const [userDetails, setUserDetails] = useState<any>({
+    business_name: userDetail?.user.business_name || '',
+    full_name: userDetail?.user.full_name || '',
+
+    email: userDetail?.user.email || '',
+    phone: userDetail?.user.phone || '',
+    address: userDetail?.user.address || '',
+    city: userDetail?.user.city || '',
+    state: userDetail?.user.state || '',
+    country: userDetail?.user.country || '',
+    zip_code: userDetail?.user.zip_code || '',
+  })
+
+  console.log(userDetail);
+
+  useEffect(() => {
+    setUserDetails({
+      business_name: userDetail?.user.business_name || '',
+      full_name: userDetail?.user.full_name || '',
+      email: userDetail?.user.email || '',
+      phone: userDetail?.user.phone || '',
+      address: userDetail?.user.address || '',
+      city: userDetail?.user.city || '',
+      state: userDetail?.user.state || '',
+      country: userDetail?.user.country || '',
+      zip_code: userDetail?.user.zip_code || '',
+    })
+  }, [userDetail])
 
   useEffect(() => {
     const checkAuthAndFetchData = async () => {
@@ -31,6 +66,7 @@ export default function CatererDashboard() {
         setUser({ authenticated: true })
       } catch (error) {
         console.error('Error fetching bookings:', error)
+        toast.error('Error fetching bookings')
         router.push('/login')
       } finally {
         setLoading(false)
@@ -50,11 +86,37 @@ export default function CatererDashboard() {
   }
 
   if (loading) {
-    return <div className="min-h-screen flex items-center justify-center">Loading...</div>
+    return  <div className="min-h-screen flex items-center justify-center">
+    <Loader className="animate-spin" />
+  </div>
   }
 
   if (!user?.authenticated) {
     return null
+  }
+
+  const updateUser = async () => {
+    try {
+      setUpdatingUser(true)
+      const response = await fetch('/api/user', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(userDetails),
+      })
+      if (!response.ok) {
+        toast.error('Failed to update user')
+      }
+      const data = await response.json()
+      toast.success('User updated successfully')
+      setUserDetails(data.user)
+    } catch (error) {
+      console.error('Error updating user:', error)
+      toast.error('Error updating user')
+    } finally {
+      setUpdatingUser(false)
+    }
   }
 
   return (
@@ -194,21 +256,15 @@ export default function CatererDashboard() {
                     </div>
                     <div>
                       <p className="text-sm text-foreground/60">Event Type</p>
-                      <p className="font-semibold">{booking.eventType}</p>
+                      <p className="font-semibold">{booking.event_type}</p>
                     </div>
                     <div>
                       <p className="text-sm text-foreground/60">Amount</p>
-                      <p className="font-bold text-accent">₦{booking.totalAmount?.toLocaleString()}</p>
+                      <p className="font-bold text-accent">{formatCurrency(booking.total_amount)}</p>
                     </div>
                     <div>
                       <p className="text-sm text-foreground/60">Status</p>
-                      <p className={`font-semibold px-3 py-1 rounded-full text-sm w-fit ${
-                        booking.status === 'completed' ? 'bg-green-100 text-green-800' :
-                        booking.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
-                        'bg-blue-100 text-blue-800'
-                      }`}>
-                        {booking.status}
-                      </p>
+                      <StatusBadge status={booking.status || 'pending'} statusLabel={booking.status || 'pending'} />
                     </div>
                   </div>
                 </Card>
@@ -232,13 +288,24 @@ export default function CatererDashboard() {
             <Card className="p-8">
               <h2 className="text-2xl font-bold text-primary mb-6">Profile Settings</h2>
               <form className="space-y-4">
+              <div>
+                  <label className="block text-sm font-semibold mb-2">Full Name</label>
+                  <input
+                    type="text"
+                    placeholder="Your full name"
+                    className="w-full border border-border rounded-md p-2"
+                    onChange={(e) => setUserDetails({ ...userDetails, full_name: e.target.value })}
+                    value={userDetails.full_name}
+                  />
+                </div>
                 <div>
                   <label className="block text-sm font-semibold mb-2">Business Name</label>
                   <input
                     type="text"
                     placeholder="Your catering business name"
-                    defaultValue="Sample Catering"
                     className="w-full border border-border rounded-md p-2"
+                    onChange={(e) => setUserDetails({ ...userDetails, business_name: e.target.value })}
+                    value={userDetails.business_name}
                   />
                 </div>
                 <div>
@@ -246,6 +313,8 @@ export default function CatererDashboard() {
                   <input
                     type="email"
                     placeholder="your@email.com"
+                    onChange={(e) => setUserDetails({ ...userDetails, email: e.target.value })}
+                    value={userDetails.email}
                     className="w-full border border-border rounded-md p-2"
                   />
                 </div>
@@ -254,6 +323,8 @@ export default function CatererDashboard() {
                   <input
                     type="tel"
                     placeholder="+234 (0)800 123 4567"
+                    onChange={(e) => setUserDetails({ ...userDetails, phone: e.target.value })}
+                    value={userDetails.phone}
                     className="w-full border border-border rounded-md p-2"
                   />
                 </div>
@@ -266,8 +337,8 @@ export default function CatererDashboard() {
                     <option>Other</option>
                   </select>
                 </div>
-                <Button className="w-full bg-primary hover:bg-primary/90 text-primary-foreground mt-6">
-                  Save Changes
+                <Button onClick={updateUser} disabled={updatingUser} className="w-full bg-primary hover:bg-primary/90 text-primary-foreground mt-6">
+                  {updatingUser ? 'Updating...' : 'Save Changes'}
                 </Button>
               </form>
             </Card>
