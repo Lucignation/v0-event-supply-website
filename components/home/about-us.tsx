@@ -7,9 +7,11 @@ export default function AboutUs() {
   const images = [
     "https://www.coca-cola.com/content/dam/onexp/ng/home-image/brands/eva-water/eva-logo-180x180-01.svg",
     "https://i.pinimg.com/736x/d1/69/33/d169331a3f00cee139c03dacc84e107f.jpg",
-    "https://www.nestlepurelife.com/themes/custom/nplus/images/logo.png",
-    "https://www.brandtimes.com.ng/wp-content/uploads/2024/02/Bigi-CSD-Logo.png",
     "https://1000logos.net/wp-content/uploads/2020/09/Aquafina-Logo-2004.jpg",
+    "https://www.brandtimes.com.ng/wp-content/uploads/2024/02/Bigi-CSD-Logo.png",
+    "https://www.nestlepurelife.com/themes/custom/nplus/images/logo.png",
+    
+    
   ];
 
   return (
