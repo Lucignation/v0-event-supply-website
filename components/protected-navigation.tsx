@@ -13,7 +13,7 @@ export default function ProtectedNavigation({title, subtitle}: {title: string, s
         localStorage.removeItem('authToken')
         localStorage.removeItem('userId')
         localStorage.removeItem('userRole')
-        router.push('/')
+        router.push('/login')
       }
 
   return (

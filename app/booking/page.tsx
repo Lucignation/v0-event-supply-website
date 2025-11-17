@@ -9,6 +9,7 @@ import { Input } from '@/components/ui/input'
 import { Card } from '@/components/ui/card'
 import ProtectedNavigation from '@/components/protected-navigation'
 import { products } from '@/data/product'
+import BackArrow from '@/components/BackArrow/BackArrow'
 
 export default function BookingPage() {
   const router = useRouter()
@@ -117,6 +118,7 @@ export default function BookingPage() {
       <ProtectedNavigation title="Event Booking" subtitle="Book your event supplies" />
       <main className="flex-1 py-8 bg-secondary">
         <div className="container mx-auto px-4">
+          <BackArrow title="Back" />
           <div className="max-w-4xl mx-auto">
             {/* Step Indicator */}
             <div className="flex gap-2 mb-8">

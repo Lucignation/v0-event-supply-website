@@ -13,6 +13,7 @@ import { useBookings } from '@/hooks/useBookings'
 import { useProducts } from '@/hooks/useProducts'
 import { toast } from 'sonner'
 import { useCustomers } from '@/hooks/useCaterer'
+import { EyeIcon } from 'lucide-react'
 
 export default function AdminDashboard() {
   const router = useRouter()
@@ -28,6 +29,15 @@ export default function AdminDashboard() {
   const [editProduct, setEditProduct] = useState<any>(null);
   const [canAddProduct, setCanAddProduct] = useState(false)
   const [customers, setCustomers] = useState<any[]>([])
+  const [addProductLoading, setAddProductLoading] = useState(false)
+  const [addProduct, setAddProduct] = useState<any>({
+    name: '',
+    category: '',
+    price: 0,
+    stock: 0,
+    description: '',
+    image: '',
+  })
 
   const { data: ordersData, isLoading: bookingsLoading, refetch: refetchBookings } = useBookings();
   const { data: productsData, isLoading: productsLoading, refetch: refetchProducts } = useProducts();
@@ -107,7 +117,7 @@ export default function AdminDashboard() {
     localStorage.removeItem('authToken')
     localStorage.removeItem('userId')
     localStorage.removeItem('userRole')
-    router.push('/')
+    router.push('/login')
   }
 
   const onEdit = (product: any) => {
@@ -203,14 +213,14 @@ export default function AdminDashboard() {
   }
 
   const handleAddProduct = async () => {
-    setLoadingUpdate(true)
+    setAddProductLoading(true)
     try {
       const response = await fetch(`/api/products`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(editProduct),
+        body: JSON.stringify(addProduct),
       })
   
       if (!response.ok) {
@@ -222,12 +232,13 @@ export default function AdminDashboard() {
       await response.json()
       toast.success('Product updated successfully')
       refetchProducts()
-      setEditProduct(null)
+      setAddProduct(null)
+      setCanAddProduct(false)
     } catch (error) {
       toast.error('Error updating product')
       console.error('Error updating product:', error)
     } finally {
-      setLoadingUpdate(false)
+      setAddProductLoading(false)
     }
   }
 
@@ -329,7 +340,7 @@ export default function AdminDashboard() {
                             onClick={() => {setOpen(true); setSelectedOrder(order)}}
                             className="text-primary hover:underline font-semibold text-sm"
                           >
-                            View
+                            <EyeIcon />
                           </button>
                         </td>
                       </tr>
@@ -495,11 +506,15 @@ export default function AdminDashboard() {
       </Modal>
 
       <Modal open={canAddProduct} onOpenChange={setCanAddProduct} title="Add Product">
-        <Input type="text" placeholder="Product Name" />
-        <Input type="text" placeholder="Product Category" />
-        <Input type="number" placeholder="Product Price" />
-        <Input type="number" placeholder="Product Stock" />
-        <Button className="bg-primary hover:bg-primary/90 text-primary-foreground mt-6" onClick={handleAddProduct}>Add Product</Button>
+        <div className="space-y-4">
+          <Input type="text" placeholder="Product Name" value={addProduct?.name || ''} onChange={(e) => setAddProduct({ ...addProduct, name: e.target.value })} />
+          <Input type="text" placeholder="Product Category" value={addProduct?.category || ''} onChange={(e) => setAddProduct({ ...addProduct, category: e.target.value })} />
+          <Input type="number" placeholder="Product Price" value={addProduct?.price || ''} onChange={(e) => setAddProduct({ ...addProduct, price: e.target.value })} />
+          <Input type="number" placeholder="Product Stock" value={addProduct?.stock || ''} onChange={(e) => setAddProduct({ ...addProduct, stock: e.target.value })} />
+          <Input type="text" placeholder="Product Description" value={addProduct?.description || ''} onChange={(e) => setAddProduct({ ...addProduct, description: e.target.value })} />
+          <Input type="text" placeholder="Product Image" value={addProduct?.image || ''} onChange={(e) => setAddProduct({ ...addProduct, image: e.target.value })} />
+        </div>
+        <Button className="bg-primary hover:bg-primary/90 text-primary-foreground mt-6" onClick={handleAddProduct}>{addProductLoading ? 'Adding...' : 'Add Product'}</Button>
       </Modal>
     </div>
   )

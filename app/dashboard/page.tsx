@@ -5,6 +5,9 @@ import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import Link from 'next/link'
+import moment from 'moment'
+import { formatCurrency } from '@/util/helper'
+import { StatusBadge } from '@/components/StatusBadge/StatusBadge'
 
 export default function CatererDashboard() {
   const router = useRouter()
@@ -40,7 +43,7 @@ export default function CatererDashboard() {
   const handleLogout = async () => {
     try {
       await fetch('/api/auth/logout', { method: 'POST' })
-      router.push('/')
+      router.push('/login')
     } catch (error) {
       console.error('Logout error:', error)
     }
@@ -116,12 +119,20 @@ export default function CatererDashboard() {
                 <p className="text-foreground/70 text-sm mt-2">Total Bookings</p>
               </Card>
               <Card className="p-6">
-                <div className="text-4xl font-bold text-accent">₦{bookings.reduce((sum, b) => sum + (b.totalAmount || 0), 0).toLocaleString()}</div>
+                <div className="text-4xl font-bold text-accent">₦{bookings.filter(b => b.status === 'completed').reduce((sum, b) => sum + (Number(b.total_amount || 0)), 0).toLocaleString()}</div>
                 <p className="text-foreground/70 text-sm mt-2">Total Spent</p>
               </Card>
               <Card className="p-6">
                 <div className="text-4xl font-bold text-primary">{bookings.filter(b => b.status === 'completed').length}</div>
                 <p className="text-foreground/70 text-sm mt-2">Completed Orders</p>
+              </Card>
+              <Card className="p-6">
+                <div className="text-4xl font-bold text-primary">{bookings.filter(b => b.status === 'pending').length}</div>
+                <p className="text-foreground/70 text-sm mt-2">Pending Orders</p>
+              </Card>
+              <Card className="p-6">
+                <div className="text-4xl font-bold text-primary">{bookings.filter(b => b.status === 'confirmed').length}</div>
+                <p className="text-foreground/70 text-sm mt-2">Confirmed Orders</p>
               </Card>
             </div>
 
@@ -133,12 +144,16 @@ export default function CatererDashboard() {
                     New Booking
                   </Button>
                 </Link>
-                <Button variant="outline" className="w-full">
-                  Browse Products
-                </Button>
-                <Button variant="outline" className="w-full">
-                  View History
-                </Button>
+                <Link href="/browse-products">
+                  <Button variant="outline" className="w-full">
+                    Browse Products
+                  </Button>
+                </Link>
+                <Link href="/booking-history">
+                  <Button variant="outline" className="w-full">
+                    View History
+                  </Button>
+                </Link>
               </div>
             </Card>
 
@@ -149,12 +164,12 @@ export default function CatererDashboard() {
                   {bookings.slice(0, 3).map((booking, i) => (
                     <div key={i} className="flex items-center justify-between p-4 bg-secondary rounded-lg">
                       <div>
-                        <p className="font-semibold">{booking.eventType || 'Event'}</p>
-                        <p className="text-sm text-foreground/70">{booking.eventDate}</p>
+                        <p className="font-semibold">{booking.event_type || 'Event'}</p>
+                        <p className="text-sm text-foreground/70">{moment(booking.event_date).format('MMMM Do, YYYY')}</p>
                       </div>
                       <div className="text-right">
-                        <p className="font-bold text-accent">₦{booking.totalAmount?.toLocaleString()}</p>
-                        <p className="text-sm text-foreground/70">{booking.status || 'pending'}</p>
+                        <p className="font-bold text-accent">{ formatCurrency(booking.total_amount)}</p>
+                        <p className="text-sm text-foreground/70"><StatusBadge status={booking.status || 'pending'} statusLabel={booking.status || 'pending'} /></p>
                       </div>
                     </div>
                   ))}

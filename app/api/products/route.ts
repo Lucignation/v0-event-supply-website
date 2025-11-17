@@ -28,3 +28,31 @@ export async function GET(request: NextRequest) {
     );
   }
 }
+
+export async function POST(request: NextRequest) {
+  try {
+    const authToken = request.cookies.get('authToken')?.value;
+    if (!authToken) {
+      return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
+    }
+
+    const decoded = await verifyToken(authToken);
+    if (!decoded) {
+      return NextResponse.json({ message: 'Invalid token' }, { status: 401 });
+    }
+
+    const userId = (decoded as any).userId;
+
+    const body = await request.json();
+    const product = await ProductRepository.create(body);
+
+    return NextResponse.json({ product }, { status: 201 });
+  } catch (error) {
+    console.error('Error creating product:', error);
+    return NextResponse.json(
+      { message: 'An error occurred while creating product.' },
+      { status: 500 }
+    );
+  }
+}
+

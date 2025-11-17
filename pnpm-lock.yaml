@@ -167,6 +167,9 @@ importers:
       recharts:
         specifier: 2.15.4
         version: 2.15.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      solar-icon-set:
+        specifier: ^2.0.1
+        version: 2.0.1(react@18.3.1)
       sonner:
         specifier: ^1.7.4
         version: 1.7.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -1815,6 +1818,11 @@ packages:
   sharp@0.34.5:
     resolution: {integrity: sha512-Ou9I5Ft9WNcCbXrU9cMgPBcCK8LiwLqcbywW3t4oDV37n1pzpuNLsYiAV8eODnjbtQlSDwZ2cUEeQz4E54Hltg==}
     engines: {node: ^18.17.0 || ^20.3.0 || >=21.0.0}
+
+  solar-icon-set@2.0.1:
+    resolution: {integrity: sha512-agfVH4iJWgLmdDI9+SLc8wWOzAmRXhAdI5LMrTc1Vtwl+OhFJI7DDhANi24yaUmRy6JKg3dzj6jGBlWC5AiA4A==}
+    peerDependencies:
+      react: ^18.0.0 || ^19.0.0
 
   sonner@1.7.4:
     resolution: {integrity: sha512-DIS8z4PfJRbIyfVFDVnK9rO3eYDtse4Omcm6bt0oEr5/jtLgysmjuBl1frJ9E/EQZrFmKx2A8m/s5s9CRXIzhw==}
@@ -3480,6 +3488,10 @@ snapshots:
       '@img/sharp-win32-ia32': 0.34.5
       '@img/sharp-win32-x64': 0.34.5
     optional: true
+
+  solar-icon-set@2.0.1(react@18.3.1):
+    dependencies:
+      react: 18.3.1
 
   sonner@1.7.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:
