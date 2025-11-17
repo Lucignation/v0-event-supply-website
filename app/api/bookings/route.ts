@@ -2,7 +2,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { BookingRepository } from '@/lib/repositories/bookings';
 import { verifyToken } from '@/lib/auth';
-import { products } from '@/data/product';
+import { ProductRepository } from '@/lib/repositories/products';
 
 export async function GET(request: NextRequest) {
   try {
@@ -46,10 +46,12 @@ export async function POST(request: NextRequest) {
     const userId = (decoded as any).userId;
     const body = await request.json();
 
+    const allProducts = await ProductRepository.findAll();
+
     const itemsArray = Object.entries(body.products).map(([productId, quantity]) => ({
         productId,
         quantity: Number(quantity),
-        unitPrice: products.find(p => p.id === productId)?.price || 0 // map from your product price list
+        unitPrice: allProducts.find(p => p.id === productId)?.price || 0 // map from your product price list
       }));
 
     const booking = await BookingRepository.create({
