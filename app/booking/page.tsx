@@ -116,7 +116,7 @@ export default function BookingPage() {
         throw new Error(data.message || 'Booking failed')
       }
 
-      router.push(`/booking/confirmation?id=${data.bookingId}`)
+      router.push(`/booking/confirmation?id=${data.booking.id}`)
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred')
     } finally {
@@ -131,7 +131,7 @@ export default function BookingPage() {
   return (
     <div className="min-h-screen flex flex-col">
       {/* <Navigation /> */}
-      <ProtectedNavigation title="Event Booking" subtitle="Book your event supplies" />
+      <ProtectedNavigation title="Aquoryx Dashboard" subtitle="Book your event supplies" />
       <main className="flex-1 py-8 bg-secondary">
         <div className="container mx-auto px-4">
           <BackArrow title="Back" />

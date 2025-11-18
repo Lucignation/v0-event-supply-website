@@ -7,6 +7,7 @@ import Footer from '@/components/footer'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import Link from 'next/link'
+import ProtectedNavigation from '@/components/protected-navigation'
 
 function ConfirmationContent() {
   const searchParams = useSearchParams()
@@ -14,7 +15,7 @@ function ConfirmationContent() {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <Navigation />
+      <ProtectedNavigation title="Aquoryx Dashboard" subtitle="Booking Confirmation" />
       <main className="flex-1 py-12 bg-secondary">
         <div className="container mx-auto px-4 max-w-md">
           <Card className="p-8 text-center">
@@ -30,11 +31,11 @@ function ConfirmationContent() {
             <div className="space-y-3 mb-8 text-left text-sm">
               <div className="flex justify-between">
                 <span className="text-foreground/70">Status:</span>
-                <span className="font-semibold text-green-600">Confirmed</span>
+                <span className="font-semibold text-green-600">Pending</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-foreground/70">Next Step:</span>
-                <span className="font-semibold">Awaiting Payment</span>
+                <span className="font-semibold">Awaiting Confirmation</span>
               </div>
             </div>
 

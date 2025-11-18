@@ -291,16 +291,16 @@ export default function CatererDashboard() {
               </Card>
             )}
 
-{
-                    pagination.total > 0 && (
-                      <Pagination
-                          totalItems={pagination.total || 0}
-                          itemsPerPage={filters.limit}
-                          onPageChange={handlePageChange}
-                          currentPage={filters.page}
-                        />
-                    )
-                  }
+            {
+              pagination.total > 0 && (
+                <Pagination
+                    totalItems={pagination.total || 0}
+                    itemsPerPage={filters.limit}
+                    onPageChange={handlePageChange}
+                    currentPage={filters.page}
+                  />
+              )
+            }
           </div>
         )}
 
