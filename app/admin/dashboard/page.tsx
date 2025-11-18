@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
@@ -14,6 +14,8 @@ import { useProducts } from '@/hooks/useProducts'
 import { toast } from 'sonner'
 import { useCustomers } from '@/hooks/useCaterer'
 import { EyeIcon } from 'lucide-react'
+import { useFilters } from '@/hooks/useFilters'
+import Pagination from '@/components/Pagination/Pagination'
 
 export default function AdminDashboard() {
   const router = useRouter()
@@ -38,13 +40,50 @@ export default function AdminDashboard() {
     description: '',
     image: '',
   })
+  const { filters, setFilters } = useFilters();
 
-  const { data: ordersData, isLoading: bookingsLoading, refetch: refetchBookings } = useBookings();
-  const { data: productsData, isLoading: productsLoading, refetch: refetchProducts } = useProducts();
-  const { data: customersData, isLoading: customersLoading, refetch: refetchCustomers } = useCustomers();
+  const { filters: productsFilters, setFilters: setProductsFilters } = useFilters();
+
+  const { filters: customersFilters, setFilters: setCustomersFilters } = useFilters();
+
+  const { data: ordersData, isLoading: bookingsLoading, refetch: refetchBookings } = useBookings(filters);
+  const { data: productsData, isLoading: productsLoading, refetch: refetchProducts } = useProducts(productsFilters);
+  const { data: customersData, isLoading: customersLoading, refetch: refetchCustomers } = useCustomers(customersFilters);
 
 
-  // console.log(productsData, ordersData)
+  console.log(customersData)
+
+  const handlePageChange = useCallback(
+    (page: number) => {
+      setFilters({
+        ...filters,
+        page: page,
+      });
+    },
+    [filters]
+  );
+
+  const handleProductsPageChange = useCallback(
+    (page: number) => {
+      setProductsFilters({
+        ...productsFilters,
+        page: page,
+      });
+    },
+    [productsFilters]
+  );
+
+  const handleCustomersPageChange = useCallback(
+    (page: number) => {
+      setCustomersFilters({
+        ...customersFilters,
+        page: page,
+      });
+    },
+    [customersFilters]
+  );
+
+  
 
   useEffect(() => {
     const token = localStorage.getItem('authToken')
@@ -244,7 +283,7 @@ export default function AdminDashboard() {
 
   //  if (!user?.authenticated) {
   //   return null
-  // }
+  // } 
 
   return (
     <div className="min-h-screen bg-secondary">
@@ -347,6 +386,16 @@ export default function AdminDashboard() {
                     )) : null}
                   </tbody>
                 </table>
+                {ordersData?.pagination?.total > 0 && (
+                  <div className="w-full mt-4">
+                    <Pagination
+                      totalItems={ordersData?.pagination?.total || 0}
+                      itemsPerPage={filters.limit}
+                      onPageChange={handlePageChange}
+                      currentPage={filters.page}
+                    />
+                  </div>
+                )}
               </div>
             </Card>
           </div>
@@ -385,6 +434,12 @@ export default function AdminDashboard() {
               </div>
             </Card> 
             )}
+            {productsData?.pagination?.total > 0 && <Pagination
+              totalItems={productsData?.pagination?.total || 0}
+              itemsPerPage={productsFilters.limit}
+              onPageChange={handleProductsPageChange}
+              currentPage={productsFilters.page}
+            />  }
           </div>
         )}
 
@@ -470,6 +525,14 @@ export default function AdminDashboard() {
 })}
                 </tbody>
               </table>
+              { customersData?.pagination?.total! > 0 && (
+                  <Pagination
+                    totalItems={customersData?.pagination?.total || 0}
+                    itemsPerPage={customersData?.pagination?.limit!}
+                    onPageChange={handleCustomersPageChange}
+                    currentPage={customersData?.pagination?.page!}
+                  />
+                ) }
             </div>
           </Card>
         )}

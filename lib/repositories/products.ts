@@ -13,7 +13,28 @@ export interface Product {
 }
 
 export const ProductRepository = {
-  async findAll(): Promise<Product[]> {
+  async findAll(page: number = 1, limit: number = 10): Promise<{ products: Product[], total: number }> {
+    const offset = (page - 1) * limit;
+    
+    // Count total products (not bookings!)
+    const countResult = await queryRows<{ count: string }>(
+      `SELECT COUNT(*) as count FROM public.products`
+    );
+    const total = parseInt(countResult[0]?.count || '0', 10);
+    
+    // Get paginated products
+    const products = await queryRows<Product>(
+      `SELECT * FROM public.products 
+       ORDER BY name 
+       LIMIT $1 OFFSET $2`,
+      [limit, offset]
+    );
+
+    return { products, total };
+  },
+
+  // Optional: Add a method to get all products without pagination
+  async findAllNoPagination(): Promise<Product[]> {
     return queryRows<Product>(
       'SELECT * FROM public.products ORDER BY name'
     );

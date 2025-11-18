@@ -18,10 +18,36 @@ export async function GET(request: NextRequest) {
 
     const userId = (decoded as any).userId;
 
-    // ✨ Clean and simple
-    const bookings = await BookingRepository.findAll();
+    const { searchParams } = new URL(request.url);
+    const page = parseInt(searchParams.get('page') || '1', 10);
+    const limit = parseInt(searchParams.get('limit') || '10', 10);
 
-    return NextResponse.json({ bookings }, { status: 200 });
+     // Validate pagination params
+     if (page < 1 || limit < 1 || limit > 100) {
+      return NextResponse.json(
+        { message: 'Invalid pagination parameters' },
+        { status: 400 }
+      );
+    }
+
+    // ✨ Clean and simple
+    const { bookings, total } = await BookingRepository.findAll(page, limit);
+
+    // Calculate pagination metadata
+    const totalPages = Math.ceil(total / limit);
+    const hasNextPage = page < totalPages;
+    const hasPreviousPage = page > 1;
+
+    return NextResponse.json({ bookings, 
+      pagination: {
+        page,
+        limit,
+        total,
+        totalPages,
+        hasNextPage,
+        hasPreviousPage,
+      } 
+    }, { status: 200 });
   } catch (error) {
     console.error('Error fetching bookings:', error);
     return NextResponse.json(
@@ -46,12 +72,12 @@ export async function POST(request: NextRequest) {
     const userId = (decoded as any).userId;
     const body = await request.json();
 
-    const allProducts = await ProductRepository.findAll();
+    const allProducts = await ProductRepository.findAll(1, 500);
 
     const itemsArray = Object.entries(body.products).map(([productId, quantity]) => ({
         productId,
         quantity: Number(quantity),
-        unitPrice: allProducts.find(p => p.id === productId)?.price || 0 // map from your product price list
+        unitPrice: allProducts.products.find(p => p.id === productId)?.price || 0 // map from your product price list
       }));
 
     const booking = await BookingRepository.create({

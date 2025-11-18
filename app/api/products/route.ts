@@ -16,10 +16,35 @@ export async function GET(request: NextRequest) {
 
     const userId = (decoded as any).userId;
 
-    // ✨ Clean and simple
-    const products = await ProductRepository.findAll();
+    const { searchParams } = new URL(request.url);
+    const page = parseInt(searchParams.get('page') || '1', 10);
+    const limit = parseInt(searchParams.get('limit') || '10', 10);
 
-    return NextResponse.json({ products }, { status: 200 });
+     // Validate pagination params
+     if (page < 1 || limit < 1 || limit > 100) {
+      return NextResponse.json(
+        { message: 'Invalid pagination parameters' },
+        { status: 400 }
+      );
+    }
+
+
+    // ✨ Clean and simple
+    const {products, total} = await ProductRepository.findAll(page, limit);
+
+     // Calculate pagination metadata
+     const totalPages = Math.ceil(total / limit);
+     const hasNextPage = page < totalPages;
+     const hasPreviousPage = page > 1;
+
+    return NextResponse.json({ products, pagination: {
+      page,
+      limit,
+      total,
+      totalPages,
+      hasNextPage,
+      hasPreviousPage,
+    } }, { status: 200 });
   } catch (error) {
     console.error('Error fetching products:', error);
     return NextResponse.json(

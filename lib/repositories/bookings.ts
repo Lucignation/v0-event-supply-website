@@ -252,8 +252,14 @@ async create(data: {
     );
   },
 
-  async findAll(): Promise<Booking[]> {
-    return queryRows<Booking>(
+  async findAll(page: number = 1, limit: number = 10): Promise<{bookings: Booking[], total: number}> {
+    const offset = (page - 1) * limit;
+    const countResult = await queryRows<{ count: string }>(
+      `SELECT COUNT(*) as count FROM public.bookings`
+    );
+    const total = parseInt(countResult[0]?.count || '0', 10);
+
+    const bookings = await queryRows<Booking>(
       `SELECT b.*, 
               u.full_name as caterer_name, 
               u.business_name,
@@ -261,8 +267,12 @@ async create(data: {
               u.email
        FROM public.bookings b
        JOIN public.users u ON b.user_id = u.id
-       ORDER BY b.created_at DESC`,
+       ORDER BY b.created_at DESC
+       LIMIT $1 OFFSET $2`,
+      [limit, offset]
     );
+
+    return { bookings, total };
   },
 
 

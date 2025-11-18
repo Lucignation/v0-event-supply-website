@@ -15,10 +15,34 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ message: 'Invalid token' }, { status: 401 });
     }
 
-    // Get customers with their bookings
-    const customers = await CustomerRepository.findAllWithBookings();
+    const { searchParams } = new URL(request.url);
+    const page = parseInt(searchParams.get('page') || '1', 10);
+    const limit = parseInt(searchParams.get('limit') || '10', 10);
 
-    return NextResponse.json({ customers }, { status: 200 });
+    // Validate pagination params
+    if (page < 1 || limit < 1 || limit > 100) {
+      return NextResponse.json(
+        { message: 'Invalid pagination parameters' },
+        { status: 400 }
+      );
+    }
+
+    // Get customers with their bookings
+    const {customers, total} = await CustomerRepository.findAllWithBookings(page, limit);
+
+    // Calculate pagination metadata
+    const totalPages = Math.ceil(total / limit);
+    const hasNextPage = page < totalPages;
+    const hasPreviousPage = page > 1;
+
+    return NextResponse.json({ customers, pagination: {
+      page,
+      limit,
+      total,
+      totalPages,
+      hasNextPage,
+      hasPreviousPage,
+    } }, { status: 200 });
   } catch (error) {
     console.error('Error fetching customers:', error);
     return NextResponse.json(

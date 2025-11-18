@@ -36,35 +36,39 @@ export const CustomerRepository = {
     );
   },
 
-  async findAllWithBookings(): Promise<Customer[]> {
-    // Get all customers
+  async findAllWithBookings(page: number = 1, limit: number = 10): Promise<{ customers: Customer[], total: number }> {
+    const offset = (page - 1) * limit;
+    
+    // Count total customers
+    const countResult = await queryRows<{ count: string }>(
+      `SELECT COUNT(*) as count 
+       FROM public.users 
+       WHERE role = 'caterer'`
+    );
+    const total = parseInt(countResult[0]?.count || '0', 10);
+    
+    // Get paginated customers with their bookings
     const customers = await queryRows<Customer>(
       `SELECT id, full_name, business_name, email, phone, role, created_at, updated_at 
        FROM public.users 
        WHERE role = 'caterer' 
-       ORDER BY business_name`
+       ORDER BY business_name
+       LIMIT $1 OFFSET $2`,
+      [limit, offset]
     );
-
+  
     // Get bookings for each customer
-    const customersWithBookings = await Promise.all(
-      customers.map(async (customer) => {
-        const bookings = await queryRows<Booking>(
-          `SELECT id, event_type, event_date, event_time, guest_count, 
-                  location, address, total_amount, status, payment_status, created_at
-           FROM public.bookings
-           WHERE user_id = $1
-           ORDER BY created_at DESC`,
-          [customer.id]
-        );
-
-        return {
-          ...customer,
-          bookings,
-        };
-      })
-    );
-
-    return customersWithBookings;
+    for (const customer of customers) {
+      const bookings = await queryRows<Booking>(
+        `SELECT * FROM public.bookings 
+         WHERE user_id = $1 
+         ORDER BY created_at DESC`,
+        [customer.id]
+      );
+      customer.bookings = bookings;
+    }
+  
+    return { customers, total };
   },
 
   async findById(customerId: string): Promise<Customer | null> {

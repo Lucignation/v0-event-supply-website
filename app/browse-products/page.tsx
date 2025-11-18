@@ -5,20 +5,23 @@ import Footer from "@/components/footer"
 import ProtectedNavigation from "@/components/protected-navigation"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { useProducts } from "@/hooks/useProducts"
 import { useRouter } from "next/navigation"
 import { Modal } from "@/components/modal"
 import { Loader } from "lucide-react"
+import { useFilters } from "@/hooks/useFilters"
+import Pagination from "@/components/Pagination/Pagination"
 
 export default function BrowseProducts() {
     const [products, setProducts] = useState<any[]>([])
     const router = useRouter()
     const [selectedProduct, setSelectedProduct] = useState<any>(null);
+    const { filters, setFilters } = useFilters();
 
-    const { data: productsData, isLoading: productsLoading, refetch: refetchProducts } = useProducts();
+    const { data: productsData, isLoading: productsLoading, refetch: refetchProducts } = useProducts(filters);
     
-
+    // ✅ Define ALL hooks BEFORE any conditional returns
     useEffect(() => {
         const token = localStorage.getItem('authToken')
         const role = localStorage.getItem('userRole')
@@ -28,21 +31,30 @@ export default function BrowseProducts() {
           return
         }
         setProducts(productsData?.products || [])
-        // fetchData()
       }, [router, productsData])
 
-      if (productsLoading) {
+    const handlePageChange = useCallback(
+        (page: number) => {
+          setFilters({
+            ...filters,
+            page: page,
+          });
+        },
+        [filters, setFilters] // ✅ Add setFilters to dependencies
+      );
+
+    // ✅ NOW you can have conditional returns
+    if (productsLoading) {
         return (
           <div className="min-h-screen flex items-center justify-center">
             <Loader className="animate-spin" />
           </div>
         )
-      }
+    }
 
-      
     return (
         <div className="min-h-screen flex flex-col">
-            <ProtectedNavigation title="Browse Products" subtitle="Browse our products" />
+            <ProtectedNavigation title="Aquoryx Dashboard" subtitle="Browse our products" />
             <main className="flex-1 py-8 bg-secondary">
                 <div className="container mx-auto px-4">
                     <BackArrow title="Back" />
@@ -56,7 +68,6 @@ export default function BrowseProducts() {
                                 <p className="text-accent font-bold mb-4">₦{product.price}</p>
                                 <p className="text-foreground/70 text-sm mb-1">Category: {product.category}</p>
                                 <p className="text-foreground/70 text-sm mb-1">Stock: {product.stock}</p>
-                                {/* <p className="text-foreground/70 text-sm mb-1">Description: {product.description}</p> */}
                                 <div className="flex gap-2">
                                     <Button variant="outline" size="sm" className="flex-1" onClick={() => setSelectedProduct(product)}>Product Details</Button>
                                 </div>
@@ -64,7 +75,17 @@ export default function BrowseProducts() {
                             ))}
                         </div>
                         </Card> 
-                        )}
+                    )}
+                    {
+                        productsData?.pagination?.total > 0 && (
+                            <Pagination
+                                totalItems={productsData?.pagination?.total || 0}
+                                itemsPerPage={filters.limit}
+                                onPageChange={handlePageChange}
+                                currentPage={filters.page}
+                            />
+                        )
+                    }
                 </div>
                 {selectedProduct && (
                     <Modal

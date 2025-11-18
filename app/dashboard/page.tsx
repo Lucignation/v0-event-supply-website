@@ -11,6 +11,8 @@ import { StatusBadge } from '@/components/StatusBadge/StatusBadge'
 import { useUserDetail } from '@/hooks/useUserDetail'
 import { toast } from 'sonner'
 import { Loader } from 'lucide-react'
+import { useFilters } from '@/hooks/useFilters'
+import Pagination from '@/components/Pagination/Pagination'
 
 export default function CatererDashboard() {
   const router = useRouter()
@@ -19,6 +21,8 @@ export default function CatererDashboard() {
   const [loading, setLoading] = useState(true)
   const [activeTab, setActiveTab] = useState('overview');
   const [updatingUser, setUpdatingUser] = useState(false);
+  const [pagination, setPagination] = useState<any>({})
+  const { filters, setFilters } = useFilters()
 
   const { data: userDetail } = useUserDetail();
 
@@ -54,15 +58,18 @@ export default function CatererDashboard() {
   useEffect(() => {
     const checkAuthAndFetchData = async () => {
       try {
-        const response = await fetch('/api/bookings/list')
+        const response = await fetch(`/api/bookings/list?page=${filters.page}&limit=${filters.limit}`)
         
         if (!response.ok) {
           router.push('/login')
           return
         }
 
-        const data = await response.json()
+        const data = await response.json();
+        console.log(data, "data");
+        
         setBookings(data.bookings || [])
+        setPagination(data.pagination)
         setUser({ authenticated: true })
       } catch (error) {
         console.error('Error fetching bookings:', error)
@@ -83,6 +90,10 @@ export default function CatererDashboard() {
     } catch (error) {
       console.error('Logout error:', error)
     }
+  }
+
+  const handlePageChange = (page: number) => {
+    setFilters({ ...filters, page })
   }
 
   if (loading) {
@@ -279,6 +290,17 @@ export default function CatererDashboard() {
                 </Link>
               </Card>
             )}
+
+{
+                    pagination.total > 0 && (
+                      <Pagination
+                          totalItems={pagination.total || 0}
+                          itemsPerPage={filters.limit}
+                          onPageChange={handlePageChange}
+                          currentPage={filters.page}
+                        />
+                    )
+                  }
           </div>
         )}
 
