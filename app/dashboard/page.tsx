@@ -13,6 +13,7 @@ import { toast } from 'sonner'
 import { Loader } from 'lucide-react'
 import { useFilters } from '@/hooks/useFilters'
 import Pagination from '@/components/Pagination/Pagination'
+import ProtectedNavigation from '@/components/protected-navigation'
 
 export default function CatererDashboard() {
   const router = useRouter()
@@ -134,18 +135,7 @@ export default function CatererDashboard() {
     <div className="min-h-screen bg-secondary">
       {/* Header */}
       <header className="bg-primary text-primary-foreground sticky top-0 z-40 shadow-md">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <div>
-            <h1 className="text-2xl font-bold">Aquoryx Dashboard</h1>
-            <p className="text-primary-foreground/80 text-sm">Caterer Portal</p>
-          </div>
-          <button
-            onClick={handleLogout}
-            className="bg-accent text-accent-foreground px-6 py-2 rounded-lg hover:bg-accent/90 transition"
-          >
-            Logout
-          </button>
-        </div>
+      <ProtectedNavigation title="Aquoryx Dashboard" subtitle="Caterer Portal" />
       </header>
 
       <main className="container mx-auto px-4 py-8">

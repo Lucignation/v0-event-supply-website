@@ -12,8 +12,8 @@ export default function Navigation() {
     <nav className="bg-primary text-primary-foreground sticky top-0 z-50 shadow-md">
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2 font-bold text-2xl">
-          <Image src="/logo.png" alt="Logo" width={50} height={50} className="rounded-full" />
-          Aquoryx
+          <Image src="/logo.png" alt="Logo" width={150} height={150} className="rounded-full" />
+          {/* Aquoryx */}
         </Link>
 
         {/* Desktop Menu */}

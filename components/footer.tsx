@@ -8,8 +8,8 @@ export default function Footer() {
         <div className="grid md:grid-cols-4 gap-8 mb-8">
           <div>
             <h3 className="font-bold text-lg mb-4 flex items-center gap-2">
-              <Image src="/logo.png" alt="Logo" width={50} height={50} className="rounded-full" />
-              Aquoryx
+              <Image src="/logo.png" alt="Logo" width={150} height={150} className="rounded-full" />
+              {/* Aquoryx */}
             </h3>
             <p className="text-primary-foreground/80 text-sm">Premium beverage and event supplies for caterers.</p>
           </div>

@@ -20,7 +20,11 @@ export default function ProtectedNavigation({title, subtitle}: {title: string, s
     <header className="bg-primary text-primary-foreground sticky top-0 z-40 shadow-md">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold">{title}</h1>
+            {/* <h1 className="text-2xl font-bold">{title}</h1> */}
+            <div className="flex items-center gap-2">
+            <Image src="/logo.png" alt="Logo" width={150} height={150} className="rounded-full" />
+            <h1 className="text-2xl font-bold">Dashboard</h1>
+            </div>
             <p className="text-primary-foreground/80 text-sm">{subtitle}</p>
           </div>
           <button
