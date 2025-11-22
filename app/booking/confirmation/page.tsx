@@ -15,7 +15,7 @@ function ConfirmationContent() {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <ProtectedNavigation title="Aquoryx Dashboard" subtitle="Booking Confirmation" />
+      <ProtectedNavigation title="Aquoryn Dashboard" subtitle="Booking Confirmation" />
       <main className="flex-1 py-12 bg-secondary">
         <div className="container mx-auto px-4 max-w-md">
           <Card className="p-8 text-center">

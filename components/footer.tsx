@@ -36,12 +36,12 @@ export default function Footer() {
             <ul className="space-y-2 text-sm">
               <li>+234 (0)800 123 4567</li>
               <li><a href="https://wa.me/234900555888" className="hover:text-accent transition">WhatsApp</a></li>
-              <li>hello@aquoryx.ng</li>
+              <li>hello@aquoryn.ng</li>
             </ul>
           </div>
         </div>
         <div className="border-t border-primary-foreground/20 pt-8 text-center text-sm text-primary-foreground/80">
-          <p>&copy; 2025 Aquoryx. All rights reserved.</p>
+          <p>&copy; 2025 Aquoryn. All rights reserved.</p>
         </div>
       </div>
     </footer>

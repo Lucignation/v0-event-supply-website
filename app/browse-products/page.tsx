@@ -54,7 +54,7 @@ export default function BrowseProducts() {
 
     return (
         <div className="min-h-screen flex flex-col">
-            <ProtectedNavigation title="Aquoryx Dashboard" subtitle="Browse our products" />
+            <ProtectedNavigation title="Aquoryn Dashboard" subtitle="Browse our products" />
             <main className="flex-1 py-8 bg-secondary">
                 <div className="container mx-auto px-4">
                     <BackArrow title="Back" />

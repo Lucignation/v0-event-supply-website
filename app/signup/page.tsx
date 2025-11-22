@@ -72,7 +72,7 @@ export default function SignUpPage() {
         <div className="container mx-auto px-4 max-w-md">
           <Card className="p-8">
             <h1 className="text-3xl font-bold text-primary mb-2">Create Your Account</h1>
-            <p className="text-foreground/70 mb-6">Join Aquoryx and start booking supplies</p>
+            <p className="text-foreground/70 mb-6">Join Aquoryn and start booking supplies</p>
 
             {success ? (
               <div className="bg-green-50 border border-green-200 text-green-800 p-4 rounded-lg mb-6">

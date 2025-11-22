@@ -7,7 +7,7 @@ export default function CTASection() {
       <div className="container mx-auto px-4 text-center">
         <h2 className="text-4xl font-bold mb-4 text-primary">Ready to Book Your Supplies?</h2>
         <p className="text-lg text-foreground/80 mb-8 max-w-2xl mx-auto">
-          Join hundreds of caterers who trust Aquoryx for their event supplies. Easy booking, fast delivery, premium quality.
+          Join hundreds of caterers who trust Aquoryn for their event supplies. Easy booking, fast delivery, premium quality.
         </p>
         <div className="flex gap-4 justify-center flex-wrap">
           <Link href="/signup">

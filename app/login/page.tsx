@@ -64,7 +64,7 @@ export default function LoginPage() {
         <div className="container mx-auto px-4 max-w-md">
           <Card className="p-8">
             <h1 className="text-3xl font-bold text-primary mb-2">Welcome Back</h1>
-            <p className="text-foreground/70 mb-6">Login to your Aquoryx account</p>
+            <p className="text-foreground/70 mb-6">Login to your Aquoryn account</p>
 
             {error ? (
               <div className="bg-red-50 border border-red-200 text-red-800 p-4 rounded-lg mb-6 text-sm">

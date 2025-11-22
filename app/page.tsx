@@ -5,6 +5,8 @@ import BenefitsSection from '@/components/home/benefits-section'
 import ServicesGrid from '@/components/home/services-grid'
 import CTASection from '@/components/home/cta-section'
 import AboutUs from '@/components/home/about-us'
+import EverythingCaterer from '@/components/home/everythingCaterer'
+import TrustGrid from '@/components/home/trust'
 
 export default function HomePage() {
   return (
@@ -13,9 +15,11 @@ export default function HomePage() {
       <main className="flex-1">
         <HeroSection />
         <AboutUs />
+        <EverythingCaterer />
         <BenefitsSection />
+        <TrustGrid />
         
-        <ServicesGrid />
+        {/* <ServicesGrid /> */}
         <CTASection />
       </main>
       <Footer />
