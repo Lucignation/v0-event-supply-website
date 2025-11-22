@@ -20,6 +20,7 @@ export default function SignUpPage() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [success, setSuccess] = useState(false)
+  const [terms, setTerms] = useState(false)
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -160,7 +161,12 @@ export default function SignUpPage() {
                 />
               </div>
 
-              <Button type="submit" className="w-full bg-primary hover:bg-primary/90 text-primary-foreground" disabled={loading}>
+              <div className="flex items-center gap-2">
+                <input type="checkbox" name="terms" value="terms" onChange={(e) => setTerms(e.target.checked)} />
+                <label className="block text-sm font-semibold text-foreground">I accept the <Link href="/terms" className="text-primary font-semibold hover:underline">terms and conditions</Link></label>
+              </div>
+
+              <Button type="submit" className="w-full bg-primary hover:bg-primary/90 text-primary-foreground" disabled={loading || !terms}>
                 {loading ? 'Creating Account...' : 'Create Account'}
               </Button>
             </form>
