@@ -68,7 +68,7 @@ export async function GET(
       [bookingId]
     );
 
-    console.log({deliveriesResult})
+    // console.log({deliveriesResult})
 
    
 

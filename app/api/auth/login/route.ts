@@ -42,6 +42,10 @@ export async function POST(request: NextRequest) {
         token,
         userId: user.id,
         role: user.role,
+        fullName: user.full_name,
+        businessName: user.business_name,
+        phone: user.phone,
+
       },
       { status: 200 }
     )

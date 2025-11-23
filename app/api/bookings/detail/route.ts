@@ -31,6 +31,9 @@ export default async function GET(request: NextRequest) {
         }
 
         const userId = (decoded as any).userId
+        if(!userId){
+            return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
+          }
 
         const booking = await BookingRepository.findById(bookingId)
         if (!booking) {

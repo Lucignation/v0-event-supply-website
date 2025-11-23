@@ -15,6 +15,11 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ message: 'Invalid token' }, { status: 401 });
     }
 
+    const userId = (decoded as any).userId
+    if(!userId){
+      return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
+    }
+
     const { searchParams } = new URL(request.url);
     const page = parseInt(searchParams.get('page') || '1', 10);
     const limit = parseInt(searchParams.get('limit') || '10', 10);

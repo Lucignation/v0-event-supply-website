@@ -13,6 +13,8 @@ export async function GET(request: NextRequest) {
     }
 
     const decoded = await verifyToken(authToken)
+    // console.log(decoded, "decoded");
+    
     if (!decoded) {
       return NextResponse.json(
         { message: 'Invalid token' },
@@ -21,6 +23,10 @@ export async function GET(request: NextRequest) {
     }
 
     const userId = (decoded as any).userId
+
+    if(!userId){
+      return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
+    }
 
     // Get query parameters
     const { searchParams } = new URL(request.url)

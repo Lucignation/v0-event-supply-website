@@ -12,6 +12,7 @@ export interface Booking {
   address?: string;
   total_amount?: number;
   status: string;
+  phone_number?: string;
   payment_status: string;
   notes?: string;
   created_at: Date;

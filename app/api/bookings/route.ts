@@ -12,11 +12,16 @@ export async function GET(request: NextRequest) {
     }
 
     const decoded = await verifyToken(authToken);
+    // console.log(decoded)
     if (!decoded) {
       return NextResponse.json({ message: 'Invalid token' }, { status: 401 });
     }
 
     const userId = (decoded as any).userId;
+
+    if(!userId){
+      return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
+    }
 
     const { searchParams } = new URL(request.url);
     const page = parseInt(searchParams.get('page') || '1', 10);

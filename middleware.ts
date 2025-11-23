@@ -4,8 +4,8 @@ import { verifyToken } from './lib/auth'
 export function middleware(request: NextRequest) {
   const authToken = request.cookies.get('authToken')?.value
   const role = request.cookies.get('userRole')?.value
-  console.log(role);
-  console.log(authToken)
+  // console.log(role);
+  // console.log(authToken)
 
   let isValidToken = false
   let userRole = 'caterer'

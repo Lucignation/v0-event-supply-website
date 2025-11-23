@@ -9,10 +9,22 @@ import { useRouter } from 'next/navigation'
 export default function ProtectedNavigation({title, subtitle}: {title: string, subtitle: string}) {
 
     const router = useRouter()
+
+    const handleLogoutApi = async () => {
+      try {
+        await fetch('/api/auth/logout', { method: 'POST' })
+        router.push('/login')
+      } catch (error) {
+        console.error('Logout error:', error)
+      }
+    }
+
     const handleLogout = () => {
         localStorage.removeItem('authToken')
         localStorage.removeItem('userId')
         localStorage.removeItem('userRole')
+        localStorage.removeItem('Aquoryn')
+        handleLogoutApi()
         router.push('/login')
       }
 

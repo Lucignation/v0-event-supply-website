@@ -40,7 +40,7 @@ export default function CatererDashboard() {
     zip_code: userDetail?.user.zip_code || '',
   })
 
-  console.log(userDetail);
+  // console.log(userDetail);
 
   useEffect(() => {
     setUserDetails({
@@ -60,6 +60,11 @@ export default function CatererDashboard() {
     const checkAuthAndFetchData = async () => {
       try {
         const response = await fetch(`/api/bookings/list?page=${filters.page}&limit=${filters.limit}`)
+
+        if(response.status === 401){
+          router.push('/login')
+          return
+        }
         
         if (!response.ok) {
           router.push('/login')
@@ -67,7 +72,7 @@ export default function CatererDashboard() {
         }
 
         const data = await response.json();
-        console.log(data, "data");
+        // console.log(data, "data");
         
         setBookings(data.bookings || [])
         setPagination(data.pagination)
@@ -117,6 +122,12 @@ export default function CatererDashboard() {
         },
         body: JSON.stringify(userDetails),
       })
+
+      if(response.status === 401){
+        router.push('/login')
+        return
+      }
+
       if (!response.ok) {
         toast.error('Failed to update user')
       }

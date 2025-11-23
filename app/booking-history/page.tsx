@@ -35,7 +35,7 @@ export default function BookingHistory() {
             }
     
             const data = await response.json();
-            console.log(data, "data");
+            // console.log(data, "data");
             
             setBookings(data.bookings || [])
             setPagination(data.pagination)

@@ -8,6 +8,7 @@ export interface Product {
   category: string;
   price: number;
   stock: number;
+  image_url?: string;
   created_at: Date;
   updated_at: Date;
 }
@@ -69,12 +70,13 @@ export const ProductRepository = {
     category: string;
     price: number;
     stock: number;
+    image_url?: string;
   }): Promise<Product> {
     return queryOne<Product>(
-      `INSERT INTO public.products (name, description, category, price, stock, created_at, updated_at)
-       VALUES ($1, $2, $3, $4, $5, NOW(), NOW())
+      `INSERT INTO public.products (name, description, category, price, stock, image_url, created_at, updated_at)
+       VALUES ($1, $2, $3, $4, $5, $6, NOW(), NOW())
        RETURNING *`,
-      [data.name, data.description, data.category, data.price, data.stock]
+      [data.name, data.description, data.category, data.price, data.stock, data.image_url]
     ) as Promise<Product>;
   },
 

@@ -15,11 +15,13 @@ export async function PUT(request: NextRequest) {
       }
       const body = await request.json();
       const userId = (decoded as any).userId;
-      console.log(body)
+      if(!userId){
+        return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
+      }
 
       const price = Number(body.price);
       const stock = Number(body.stock); 
-      console.log(price, stock)
+      // console.log(price, stock)
 
       if (isNaN(price) || isNaN(stock)) {
         return NextResponse.json({ error: "Price or stock is invalid" }, { status: 400 });

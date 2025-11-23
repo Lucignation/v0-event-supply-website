@@ -1,6 +1,7 @@
 // hooks/useCustomers.ts  ← Fix filename
 import { useQuery } from "@tanstack/react-query";
 import { toast } from "sonner"; // Optional: for user feedback
+import { useRouter } from "next/navigation";
 
 // Types
 interface Customer {
@@ -35,10 +36,14 @@ interface CustomersFilters {
 }
 
 export function useCustomers({ page = 1, limit = 10 }: CustomersFilters = {}) {
+  const router = useRouter()
   return useQuery<CustomersResponse>({
     queryKey: ["customers", page, limit],
     queryFn: async () => {
       const res = await fetch(`/api/customers?page=${page}&limit=${limit}`);
+      if(res.status === 401){
+        router.push('/login')
+      }
       
       if (!res.ok) {
         const error = await res.json().catch(() => ({ message: "Failed to fetch customers" }));

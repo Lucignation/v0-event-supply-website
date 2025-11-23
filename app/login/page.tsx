@@ -35,15 +35,29 @@ export default function LoginPage() {
         body: JSON.stringify(formData),
       })
 
+      // await fetch('/api/migrate', {
+      //   method: 'GET',
+      // })
+
       const data = await response.json()
 
       if (!response.ok) {
         throw new Error(data.message || 'Login failed')
       }
 
+      // console.log(data)
+
       localStorage.setItem('authToken', data.token)
       localStorage.setItem('userRole', data.role)
       localStorage.setItem('userId', data.userId)
+      localStorage.setItem('Aquoryn', JSON.stringify({
+        userId: data.userId,
+        role: data.role,
+        fullName: data.fullName,
+        businessName: data.businessName,
+        phone: data.phone,
+      }))
+      
 
       if (data.role === 'admin') {
         router.push('/admin/dashboard')

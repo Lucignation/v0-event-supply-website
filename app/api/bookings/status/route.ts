@@ -15,6 +15,9 @@ export async function PATCH(request: NextRequest) {
     }
 
     const userId = (decoded as any).userId;
+    if(!userId){
+      return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
+    }
     const body = await request.json();
 
     const booking = await BookingRepository.updateStatus(body.bookingId, body.status);

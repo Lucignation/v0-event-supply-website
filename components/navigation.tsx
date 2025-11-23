@@ -2,11 +2,21 @@
 
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Image from 'next/image'
 
 export default function Navigation() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [userDetail, setUserDetail] = useState<any>(null);
+
+  useEffect(() => {
+    const stored = localStorage.getItem("Aquoryn");
+    if (stored) {
+      setUserDetail(JSON.parse(stored));
+    }
+  }, []);
+
+  // console.log(userDetail)
 
   return (
     <nav className="bg-primary text-primary-foreground sticky top-0 z-50 shadow-md">
@@ -26,7 +36,7 @@ export default function Navigation() {
         </div>
 
         {/* Auth Buttons */}
-        <div className="hidden md:flex items-center gap-4">
+        { !userDetail || userDetail.userId === null ? <div className="hidden md:flex items-center gap-4">
           <Link href="/login">
             <Button variant="ghost" className="text-primary-foreground hover:bg-primary-foreground/10">
               Login
@@ -37,7 +47,15 @@ export default function Navigation() {
               Sign Up
             </Button>
           </Link>
+        </div> : 
+          <div className="hidden md:flex items-center gap-4">
+          <Link href="/dashboard">
+          <Button className="bg-accent text-accent-foreground hover:bg-accent/90">
+              Dashboard
+            </Button>
+          </Link>
         </div>
+        }
 
         {/* Mobile Menu Button */}
         <button className="md:hidden" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>

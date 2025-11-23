@@ -16,6 +16,7 @@ import { useCustomers } from '@/hooks/useCaterer'
 import { EyeIcon } from 'lucide-react'
 import { useFilters } from '@/hooks/useFilters'
 import Pagination from '@/components/Pagination/Pagination'
+import Image from 'next/image'
 
 export default function AdminDashboard() {
   const router = useRouter()
@@ -40,6 +41,9 @@ export default function AdminDashboard() {
     description: '',
     image: '',
   })
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string>('');
+
   const { filters, setFilters } = useFilters();
 
   const { filters: productsFilters, setFilters: setProductsFilters } = useFilters();
@@ -51,7 +55,16 @@ export default function AdminDashboard() {
   const { data: customersData, isLoading: customersLoading, refetch: refetchCustomers } = useCustomers(customersFilters);
 
 
-  console.log(customersData)
+  // console.log(customersData)
+
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setImageFile(file);
+      setImagePreview(URL.createObjectURL(file));
+    }
+  };
 
   const handlePageChange = useCallback(
     (page: number) => {
@@ -254,12 +267,29 @@ export default function AdminDashboard() {
   const handleAddProduct = async () => {
     setAddProductLoading(true)
     try {
+      let imageUrl = '';
+       // Upload image first if exists
+       if (imageFile) {
+        const uploadFormData = new FormData();
+        uploadFormData.append('file', imageFile);
+
+        const uploadRes = await fetch('/api/upload', {
+          method: 'POST',
+          body: uploadFormData,
+        });
+
+        if (!uploadRes.ok)  toast.error('Image upload failed');
+        
+        const uploadData = await uploadRes.json();
+        imageUrl = uploadData.url;
+      };
+
       const response = await fetch(`/api/products`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(addProduct),
+        body: JSON.stringify({ ...addProduct, image_url: imageUrl }),
       })
   
       if (!response.ok) {
@@ -417,9 +447,17 @@ export default function AdminDashboard() {
                   {products?.map((product: any, i: number) => (
                   <Card key={i} className="p-6">
                     {editProduct && editProduct.id === product.id ? <Input type="text" value={editProduct.name || ''} onChange={(e) => setEditProduct({ ...editProduct, name: e.target.value })} /> : <h3 className="font-semibold mb-2">{product.name}</h3>}
-                    {editProduct && editProduct.id === product.id ? <Input type="number" value={editProduct.price || 0} onChange={(e) => setEditProduct({ ...editProduct, price: e.target.value })} /> :  <p className="text-accent font-bold mb-4">₦{product.price}</p>}
-                    <p className="text-foreground/70 text-sm mb-4">Category: {product.category}</p>
-                    {editProduct && editProduct.id === product.id ? <Input type="number" value={editProduct.stock || 0} onChange={(e) => setEditProduct({ ...editProduct, stock: e.target.value })} /> : <p className="text-foreground/70 text-sm mb-6">Stock: {product.stock}</p>}
+                    <div className="flex items-center justify-between gap-4">
+                      <div>
+                        {editProduct && editProduct.id === product.id ? <Input type="number" value={editProduct.price || 0} onChange={(e) => setEditProduct({ ...editProduct, price: e.target.value })} /> :  <p className="text-accent font-bold mb-4">₦{product.price}</p>}
+                        <p className="text-foreground/70 text-sm mb-4">Category: {product.category}</p>
+                        {editProduct && editProduct.id === product.id ? <Input type="number" value={editProduct.stock || 0} onChange={(e) => setEditProduct({ ...editProduct, stock: e.target.value })} /> : <p className="text-foreground/70 text-sm mb-6">Stock: {product.stock}</p>}
+                      </div>
+                      {product?.image_url ? <div>
+                        {editProduct && editProduct.id === product.id ? <Input type="file" onChange={(e) => setEditProduct({ ...editProduct, image_url: e.target.value })} /> : <Image src={product.image_url} alt={product.name} width={30} height={30} />}
+                      </div> : <div>
+                      </div>}
+                    </div>
                     {editProduct && editProduct?.id === product.id ? <div className="flex gap-2">
                       <Button variant="outline" size="sm" className="flex-1" onClick={() => setEditProduct(null)}>Cancel</Button>
                       <Button variant="default" size="sm" className="flex-1" onClick={updateProduct}>Update Product</Button>
@@ -575,7 +613,18 @@ export default function AdminDashboard() {
           <Input type="number" placeholder="Product Price" value={addProduct?.price || ''} onChange={(e) => setAddProduct({ ...addProduct, price: e.target.value })} />
           <Input type="number" placeholder="Product Stock" value={addProduct?.stock || ''} onChange={(e) => setAddProduct({ ...addProduct, stock: e.target.value })} />
           <Input type="text" placeholder="Product Description" value={addProduct?.description || ''} onChange={(e) => setAddProduct({ ...addProduct, description: e.target.value })} />
-          <Input type="text" placeholder="Product Image" value={addProduct?.image || ''} onChange={(e) => setAddProduct({ ...addProduct, image: e.target.value })} />
+          <div>
+            <label className="block mb-2">Product Image</label>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleImageChange}
+              className="w-full"
+            />
+            {imagePreview && (
+              <Image src={imagePreview} width={100} height={100} alt="Preview" className="mt-2 w-32 h-32 object-cover" />
+            )}
+          </div>
         </div>
         <Button className="bg-primary hover:bg-primary/90 text-primary-foreground mt-6" onClick={handleAddProduct}>{addProductLoading ? 'Adding...' : 'Add Product'}</Button>
       </Modal>
