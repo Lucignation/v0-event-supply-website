@@ -146,7 +146,7 @@ export default function CatererDashboard() {
     <div className="min-h-screen bg-secondary">
       {/* Header */}
       <header className="bg-primary text-primary-foreground sticky top-0 z-40 shadow-md">
-      <ProtectedNavigation title="Aquoryn Dashboard" subtitle="Caterer Portal" />
+      <ProtectedNavigation title="Resuply Dashboard" subtitle="Caterer Portal" />
       </header>
 
       <main className="container mx-auto px-4 py-8">

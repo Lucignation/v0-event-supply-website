@@ -11,11 +11,11 @@ export default function FaqPage() {
 
   const faqs = [
     {
-      question: "What is Aquoryn?",
-      answer: "Aquoryn is a premium event beverage supply service that provides clean bottled water and drinks for caterers, event planners, and corporate events across Nigeria. We offer reliable booking, fast delivery, and high-quality products."
+      question: "What is Resuply?",
+      answer: "Resuply is a premium event beverage supply service that provides clean bottled water and drinks for caterers, event planners, and corporate events across Nigeria. We offer reliable booking, fast delivery, and high-quality products."
     },
     {
-      question: "Who can use Aquoryn's services?",
+      question: "Who can use Resuply's services?",
     //   answer: "Our platform is designed for caterers, event planners, party vendors, corporate organisations, and individuals hosting events. If you need drinks delivered quickly and professionally, we're here for you."
     answer: <div><h2>Our platform is designed for:</h2>
     <ul className="list-disc ml-6">
@@ -36,7 +36,7 @@ export default function FaqPage() {
     },
     {
       question: "What areas do you deliver to?",
-      answer: "Aquoryn currently delivers within major cities in Nigeria. You can enter your location at checkout to confirm delivery availability."
+      answer: "Resuply currently delivers within major cities in Nigeria. You can enter your location at checkout to confirm delivery availability."
     },
     {
       question: "What products do you supply?",
@@ -65,15 +65,15 @@ export default function FaqPage() {
     },
     {
       question: "What happens if my order arrives late?",
-      answer: "If delays are caused by Aquoryn, we will reschedule or compensate you accordingly. If delays are caused by address issues, traffic, or external factors, normal refund rules apply."
+      answer: "If delays are caused by Resuply, we will reschedule or compensate you accordingly. If delays are caused by address issues, traffic, or external factors, normal refund rules apply."
     },
     {
       question: "Can I become a partner or reseller?",
-      answer: "Yes. Aquoryn collaborates with caterers, event planners, and beverage brands. Contact us to discuss partnerships."
+      answer: "Yes. Resuply collaborates with caterers, event planners, and beverage brands. Contact us to discuss partnerships."
     },
     {
-      question: "How do I contact Aquoryn?",
-      answer: "You can reach us through email, phone, or visit our website at aquoryn.com"
+      question: "How do I contact Resuply?",
+      answer: "You can reach us through email, phone, or visit our website at Resuply.com"
     }
   ];
 
@@ -142,7 +142,7 @@ export default function FaqPage() {
                     <Mail className="w-5 h-5 flex-shrink-0" />
                     <div className="overflow-hidden">
                         <p className="text-xs text-blue-100">Email</p>
-                        <p className="font-semibold text-sm truncate">info@aquoryn.com</p>
+                        <p className="font-semibold text-sm truncate">info@Resuply.com</p>
                     </div>
                     </div>
                     
@@ -158,7 +158,7 @@ export default function FaqPage() {
                     <Globe className="w-5 h-5 flex-shrink-0" />
                     <div>
                         <p className="text-xs text-blue-100">Website</p>
-                        <p className="font-semibold text-sm">aquoryn.com</p>
+                        <p className="font-semibold text-sm">Resuply.com</p>
                     </div>
                     </div>
                 </div>

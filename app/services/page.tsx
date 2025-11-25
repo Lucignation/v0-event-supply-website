@@ -208,7 +208,7 @@ export default function ServicesPage() {
           <div className="container mx-auto px-4 text-center">
             <h2 className="text-4xl font-bold mb-4">Ready to Get Started?</h2>
             <p className="mb-8 text-xl text-blue-100 max-w-2xl mx-auto">
-              Join hundreds of caterers who trust Aquoryn for their event supplies
+              Join hundreds of caterers who trust Resuply for their event supplies
             </p>
             <div className="flex gap-4 justify-center flex-wrap">
               <Button size="lg" className="bg-white text-blue-600 hover:bg-blue-50 px-8 py-6 text-lg">

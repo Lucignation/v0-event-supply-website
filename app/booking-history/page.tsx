@@ -65,7 +65,7 @@ export default function BookingHistory() {
 
     return (
         <div className="min-h-screen flex flex-col">
-            <ProtectedNavigation title="Aquoryn Dashboard" subtitle="Your booking history" />
+            <ProtectedNavigation title="Resuply Dashboard" subtitle="Your booking history" />
             <main className="flex-1 py-8 bg-secondary">
                 <div className="container mx-auto px-4">
                     <BackArrow title="Back" />

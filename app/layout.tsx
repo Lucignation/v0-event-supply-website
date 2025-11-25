@@ -9,7 +9,7 @@ const _geist = Geist({ subsets: ["latin"] });
 const _geistMono = Geist_Mono({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: 'Aquoryn - Premium Event Supplies & Catering Solutions',
+  title: 'Resuply - Premium Event Supplies & Catering Solutions',
   description: 'Book water, soft drinks, ice blocks, and event consumables for your catering needs. Fast delivery, premium quality.',
   generator: 'v0.app',
   icons: {

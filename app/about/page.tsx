@@ -38,7 +38,7 @@
 //         {/* Why Choose Us */}
 //         <section className="py-16 bg-secondary">
 //           <div className="container mx-auto px-4">
-//             <h2 className="text-3xl font-bold text-center mb-12">Why Choose Aquoryn?</h2>
+//             <h2 className="text-3xl font-bold text-center mb-12">Why Choose Resuply?</h2>
 //             <div className="grid md:grid-cols-3 gap-8">
 //               {[
 //                 { title: 'Reliability', desc: 'On-time delivery guaranteed for all orders' },
@@ -156,7 +156,7 @@ export default function AboutPage() {
               <h2 className="text-4xl font-bold text-center mb-12 text-gray-900">Our Story</h2>
               <div className="prose prose-lg max-w-none text-gray-700 leading-relaxed space-y-6">
                 <p className="text-xl">
-                  Aquoryn was born from a simple observation: caterers across Nigeria were struggling 
+                  Resuply was born from a simple observation: caterers across Nigeria were struggling 
                   with unreliable suppliers, inconsistent quality, and delivery headaches. We knew there 
                   had to be a better way.
                 </p>
@@ -255,7 +255,7 @@ export default function AboutPage() {
         {/* Why Choose Us */}
         <section className="py-20 bg-white">
           <div className="container mx-auto px-4">
-            <h2 className="text-4xl font-bold text-center mb-4 text-gray-900">Why Choose Aquoryn?</h2>
+            <h2 className="text-4xl font-bold text-center mb-4 text-gray-900">Why Choose Resuply?</h2>
             <p className="text-center text-gray-600 mb-16 max-w-2xl mx-auto">
               We don't just deliver products—we deliver peace of mind
             </p>

@@ -44,7 +44,7 @@ export default function ContactPage() {
     {
       icon: <Mail className="w-8 h-8" />,
       title: 'Email',
-      value: 'hello@aquoryn.ng',
+      value: 'hello@Resuply.ng',
       subtext: 'Response within 24 hours',
       color: 'from-purple-500 to-pink-500',
       action: 'Send Email'
@@ -217,7 +217,7 @@ export default function ContactPage() {
                         onChange={(e) => setFormData({...formData, consent: e.target.checked})}
                       />
                       <label htmlFor="consent" className="text-sm text-gray-600">
-                        I agree to receive communications from Aquoryn regarding my inquiry
+                        I agree to receive communications from Resuply regarding my inquiry
                       </label>
                     </div>
                     <Button 

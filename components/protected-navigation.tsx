@@ -23,7 +23,7 @@ export default function ProtectedNavigation({title, subtitle}: {title: string, s
         localStorage.removeItem('authToken')
         localStorage.removeItem('userId')
         localStorage.removeItem('userRole')
-        localStorage.removeItem('Aquoryn')
+        localStorage.removeItem('Resuply')
         handleLogoutApi()
         router.push('/login')
       }
@@ -34,7 +34,7 @@ export default function ProtectedNavigation({title, subtitle}: {title: string, s
           <div>
             {/* <h1 className="text-2xl font-bold">{title}</h1> */}
             <div className="flex items-center gap-2">
-            <Image src="/logo.png" alt="Logo" width={150} height={150} className="rounded-full" />
+            <Image src="/resuply-logo-white.png" alt="Logo" width={150} height={150} className="rounded-full" />
             <h1 className="text-2xl font-bold">Dashboard</h1>
             </div>
             <p className="text-primary-foreground/80 text-sm">{subtitle}</p>

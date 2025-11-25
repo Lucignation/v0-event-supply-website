@@ -10,15 +10,15 @@ export default function TermsPage() {
            <div className="container mx-auto px-4 py-4">
                 <h1 className="text-4xl font-bold mb-4">Terms and Conditions</h1>
                 <p className="text-lg mb-4">Effective Date: November 22nd, 2025</p>
-                <p className="text-lg mb-4">These Terms and Conditions govern the use of the Aquoryn website and services. By accessing our website or booking with Aquoryn, you agree to these terms.</p>
+                <p className="text-lg mb-4">These Terms and Conditions govern the use of the Resuply website and services. By accessing our website or booking with Resuply, you agree to these terms.</p>
                 <h2 className="text-2xl font-bold mb-4 mt-[30px]">1. ⁠Definitions</h2>
                 <ul className="list-decimal ml-6">
-                    <li>“Aquoryn” / “We” / “Our” — The company providing beverage and water supply services.</li>
+                    <li>“Resuply” / “We” / “Our” — The company providing beverage and water supply services.</li>
                     <li>“User” / “Customer” — Anyone who visits our website or books our services.</li>
                     <li>“Service” — Water supply, beverage delivery, and related event logistics.</li>
                 </ul>
 
-                <h2 className="text-2xl font-bold mb-4 mt-[30px]">2. Use of the Aquoryn Website</h2>
+                <h2 className="text-2xl font-bold mb-4 mt-[30px]">2. Use of the Resuply Website</h2>
                 <p>Users agree not to:</p>
                 <ul className="list-decimal ml-6">
                     <li>Misuse or disrupt the platform</li>
@@ -29,7 +29,7 @@ export default function TermsPage() {
 
                 <h2 className="text-2xl font-bold mb-4 mt-[30px]">3.⁠ ⁠Bookings & Orders</h2>
                 <ul className="list-decimal ml-6">
-                    <li>All orders must be made via the Aquoryn website or designated channels.</li>
+                    <li>All orders must be made via the Resuply website or designated channels.</li>
                     <li>A booking is confirmed only after full or partial payment (where applicable).</li>
                     <li>Users must provide accurate delivery and event details.</li>
                     <li>Once a booking is confirmed, it cannot be canceled or modified.</li>
@@ -40,12 +40,12 @@ export default function TermsPage() {
                     <li>Users must provide accurate delivery and event details.</li>
                     <li>Users are responsible for providing accurate delivery addresses.</li>
                     <li>Delivery times are estimated based on the logistics partner's schedule.</li>
-                    <li>Aquoryn is not liable for delays caused by incorrect addresses, traffic, weather, or other external conditions.</li>
+                    <li>Resuply is not liable for delays caused by incorrect addresses, traffic, weather, or other external conditions.</li>
                     <li>Large or bulk orders may require advance notice.</li>
                 </ul>
 
                 <h2 className="text-2xl font-bold mb-4 mt-[30px]">5.⁠ Cancellations & Refunds</h2>
-                <p>Customers may cancel by contacting Aquoryn directly. Cancellation fees may apply based on:</p>
+                <p>Customers may cancel by contacting Resuply directly. Cancellation fees may apply based on:</p>
                 <ul className="list-decimal ml-6">
                     <li>Order size</li>
                     <li>Preparation stage</li>
@@ -58,11 +58,11 @@ export default function TermsPage() {
                 <ul className="list-decimal ml-6">
                     <li>Prices may vary based on availability, demand, or location.</li>
                     <li>Payments are securely processed by approved third parties.</li>
-                    <li>Refunds follow Aquoryn’s <Link href="/refund-policy" className="hover:text-accent text-primary transition underline">refund policy</Link></li>
+                    <li>Refunds follow Resuply’s <Link href="/refund-policy" className="hover:text-accent text-primary transition underline">refund policy</Link></li>
                 </ul>
 
                 <h2 className="text-2xl font-bold mb-4 mt-[30px]">7. Service Refusal</h2>
-                <p>Aquoryn reserves the right to refuse service if:</p>
+                <p>Resuply reserves the right to refuse service if:</p>
                 <ul className="list-decimal ml-6">
                     <li>Violates these terms</li>
                     <li>Attempts to misuse the platform</li>
@@ -74,18 +74,18 @@ export default function TermsPage() {
                 </ul>
 
                 <h2 className="text-2xl font-bold mb-4 mt-[30px]">8. Limitation of Liability</h2>
-                <p>Aquoryn is not responsible for:</p>
+                <p>Resuply is not responsible for:</p>
                 <ul className="list-decimal ml-6">
                     <li>Event disruptions caused by late deliveries due to external factors</li>
                     <li>Damages resulting from misuse of products</li>
-                    <li>Losses caused by third-party providers beyond Aquoryn’s control</li>
+                    <li>Losses caused by third-party providers beyond Resuply’s control</li>
                 </ul>
 
                 <h2 className="text-2xl font-bold mb-4 mt-[30px]">9. ⁠Intellectual Property</h2>
-                <p>All content, logos, images, and branding on the Aquoryn website are the property of Aquoryn and may not be copied or distributed without written permission.</p>
+                <p>All content, logos, images, and branding on the Resuply website are the property of Resuply and may not be copied or distributed without written permission.</p>
 
                 <h2 className="text-2xl font-bold mb-4 mt-[30px]">10. Termination</h2>
-                <p>Aquoryn reserves the right to terminate or suspend your access to the platform or services if:</p>
+                <p>Resuply reserves the right to terminate or suspend your access to the platform or services if:</p>
                 <ul className="list-decimal ml-6">
                     <li>Violation of these terms</li>
                     <li>Use of the platform</li>
@@ -101,7 +101,7 @@ export default function TermsPage() {
                 <p>Any disputes arising from or related to these terms shall be resolved through arbitration in accordance with the laws of the Federal Republic of Nigeria.</p>
 
                 <h2 className="text-2xl font-bold mb-4 mt-[30px]">13. Contact Us</h2>
-                <p>If you have any questions or concerns about these terms, please contact us at <Link className="text-primary hover:text-accent transition underline" href="mailto:hello@aquoryn.ng">hello@aquoryn.ng</Link>.</p>
+                <p>If you have any questions or concerns about these terms, please contact us at <Link className="text-primary hover:text-accent transition underline" href="mailto:hello@Resuply.ng">hello@Resuply.ng</Link>.</p>
            </div>
 
            <Footer />

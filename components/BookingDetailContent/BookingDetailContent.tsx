@@ -40,7 +40,7 @@ export default function BookingDetailsContent() {
     if (isLoading) {
         return (
             <div className="min-h-screen flex flex-col">
-                <ProtectedNavigation title="Aquoryn Dashboard" subtitle="Booking Details" />
+                <ProtectedNavigation title="Resuply Dashboard" subtitle="Booking Details" />
                 <main className="flex-1 py-8 bg-secondary">
                     <div className="container mx-auto px-4 flex items-center justify-center">
                         <Loader className="animate-spin h-8 w-8" />
@@ -54,7 +54,7 @@ export default function BookingDetailsContent() {
     if (error || !booking) {
         return (
             <div className="min-h-screen flex flex-col">
-                <ProtectedNavigation title="Aquoryn Dashboard" subtitle="Booking Details" />
+                <ProtectedNavigation title="Resuply Dashboard" subtitle="Booking Details" />
                 <main className="flex-1 py-8 bg-secondary">
                     <div className="container mx-auto px-4">
                         <BackArrow title="Back" />
@@ -75,7 +75,7 @@ export default function BookingDetailsContent() {
     
     return (
         <div className="min-h-screen flex flex-col">
-            <ProtectedNavigation title="Aquoryn Dashboard" subtitle="Booking Details" />
+            <ProtectedNavigation title="Resuply Dashboard" subtitle="Booking Details" />
             <main className="flex-1 py-8 bg-secondary">
                 <div className="container mx-auto px-4">
                     <BackArrow title="Back" />

@@ -9,7 +9,7 @@ export default function RefundPolicyPage() {
             <div className="container mx-auto px-4 py-4">
                 <h1 className="text-4xl font-bold mb-4">Refund Policy</h1>
                 <p className="text-lg mb-4">Effective Date: November 22nd, 2025</p>
-                <p className="text-lg mb-4">At Aquoryn, we are committed to providing reliable, high-quality water and beverage supply services for caterers, event planners, and corporate clients. This Refund Policy explains how refunds, cancellations, and adjustments are handled for all bookings made through our platform.</p>
+                <p className="text-lg mb-4">At Resuply, we are committed to providing reliable, high-quality water and beverage supply services for caterers, event planners, and corporate clients. This Refund Policy explains how refunds, cancellations, and adjustments are handled for all bookings made through our platform.</p>
                 <h2 className="text-2xl font-bold mb-4 mt-[30px]">1. 1.⁠ ⁠Eligibility for Refunds</h2>
                 <p>Refunds may be issued under the following conditions:</p>
                 <ul className="list-decimal ml-6">
@@ -19,8 +19,8 @@ export default function RefundPolicyPage() {
                         <li>50% refund if cancelled 24–48 hours before delivery.</li>
                         <li>No refund for cancellations made less than 24 hours before delivery.</li>
                     </ul>
-                    <li>Order Cancelled by Aquoryn</li>
-                    <p>If Aquoryn cancels an order due to operational issues or product unavailability:</p>
+                    <li>Order Cancelled by Resuply</li>
+                    <p>If Resuply cancels an order due to operational issues or product unavailability:</p>
                     <ul className="list-disc ml-6">
                         <li>Customer receives a full refund or may choose a rescheduled delivery at no extra cost.</li>
                     </ul>
@@ -44,9 +44,9 @@ export default function RefundPolicyPage() {
                     <li>Product quantity delivered differs from the quantity ordered.</li>
                     <li>Some items are unavailable and customer accepts a partial delivery.</li>
                 </ul>
-                <p>In such cases, Aquoryn will refund the difference within 3–7 business days.</p>
+                <p>In such cases, Resuply will refund the difference within 3–7 business days.</p>
                 <h2 className="text-2xl font-bold mb-4 mt-[30px]">4. Delivery-Related Issues</h2>
-                <p>If delivery is delayed due to reasons within Aquoryn’s control, customers may request:</p>
+                <p>If delivery is delayed due to reasons within Resuply’s control, customers may request:</p>
                 <ul className="list-decimal ml-6">
                     <li>Delivery rescheduling at no cost</li>
                     <li>A partial refund (case-by-case basis)</li>
@@ -77,10 +77,10 @@ export default function RefundPolicyPage() {
                 <p>Refunds will be issued using the same payment method used for the original order, unless otherwise agreed.</p>
 
                 <h2 className="text-2xl font-bold mb-4 mt-[30px]">Changes to This Policy</h2>
-                <p>Aquoryn may update this Refund Policy at any time. The updated version will be posted on this page with a revised “Last Updated” date.</p>
+                <p>Resuply may update this Refund Policy at any time. The updated version will be posted on this page with a revised “Last Updated” date.</p>
 
                 <h2 className="text-2xl font-bold mb-4 mt-[30px]">8. Contact Us</h2>
-                <p>If you have any questions or concerns about these terms, please contact us at <Link className="text-primary hover:text-accent transition underline" href="mailto:hello@aquoryn.ng">hello@aquoryn.ng</Link>.</p>
+                <p>If you have any questions or concerns about these terms, please contact us at <Link className="text-primary hover:text-accent transition underline" href="mailto:hello@Resuply.ng">hello@Resuply.ng</Link>.</p>
             </div>
                 
             

@@ -131,7 +131,7 @@ export default function BookingPage() {
   return (
     <div className="min-h-screen flex flex-col">
       {/* <Navigation /> */}
-      <ProtectedNavigation title="Aquoryn Dashboard" subtitle="Book your event supplies" />
+      <ProtectedNavigation title="Resuply Dashboard" subtitle="Book your event supplies" />
       <main className="flex-1 py-8 bg-secondary">
         <div className="container mx-auto px-4">
           <BackArrow title="Back" />
