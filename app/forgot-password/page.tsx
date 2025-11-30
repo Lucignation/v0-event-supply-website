@@ -20,13 +20,33 @@ export default function ForgotPasswordPage() {
     setLoading(true)
 
     try {
-      const response = await fetch('/api/auth/forgot-password', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email }),
-      })
+      // const response = await fetch('/api/auth/forgot-password', {
+      //   method: 'POST',
+      //   headers: { 'Content-Type': 'application/json' },
+      //   body: JSON.stringify({ email }),
+      // })
+
+      // const data = await response.json()
+
+      const response = await fetch("/api/send-email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "FORGOT_PASSWORD",
+          user: {
+            email: email,
+            name: "John Doe"
+          },
+          admin: {
+            email: "info@useresuply.com"
+          }
+        })
+      });
+      console.log(response)
 
       const data = await response.json()
+      console.log(data)
+      
 
       if (!response.ok) {
         throw new Error(data.message || 'Request failed')
